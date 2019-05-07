@@ -1,0 +1,44 @@
+name: d7tod8migrate
+recipe: drupal8
+env_file:
+  - config/config.env
+config:
+  webroot: drupal8/web
+  config:
+    php: config/php.ini
+    database: config/my.cnf
+services:
+  appserver:
+    webroot: app/web
+    xdebug: true
+  drupal7db:
+    type: mysql
+    portforward: true
+    creds:
+      user: drupal7
+      password: drupal7
+      database: drupal7
+tooling:
+  mi-init:
+    description: Initialise some default migration setup.
+    service: appserver
+    cmd: scripts/mi-init.sh
+    user: root
+  mist:
+    description: View migration status
+    cmd:
+      - appserver: drush migrate-status
+  miup:
+    description: Dump D8 database and run migrate-upgrade
+    service: appserver
+    cmd:
+      - drupal dbdu --gz && mkdir ../../exports/data && mv drupal8**.sql.gz ../../exports/data
+      - drush migrate-upgrade --configure-only --legacy-db-key=drupal7db --legacy-root=../../imports/files/
+  miip:
+    description: Perform a migrate-import
+    cmd:
+      - appserver: drush migrate-import
+  mirs:
+    description: Perform a migrate-reset-status
+    cmd:
+      - appserver: drush migrate-reset-status
