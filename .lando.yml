@@ -9,7 +9,7 @@ config:
     database: config/my.cnf
 services:
   appserver:
-    webroot: app/web
+    webroot: drupal8/web
     xdebug: true
   drupal7db:
     type: mysql
@@ -27,18 +27,19 @@ tooling:
   mist:
     description: View migration status
     cmd:
-      - appserver: drush migrate-status
+      - appserver: drush -r /app/drupal8/web migrate-status
   miup:
     description: Dump D8 database and run migrate-upgrade
     service: appserver
     cmd:
-      - drupal dbdu --gz && mkdir ../../exports/data && mv drupal8**.sql.gz ../../exports/data
-      - drush migrate-upgrade --configure-only --legacy-db-key=drupal7db --legacy-root=../../imports/files/
+      - mkdir -p /app/exports/data
+      - drupal --root=/app/drupal8/web dbdu --gz && mv /app/drupal8/web/drupal8**.sql.gz /app/exports/data
+      - drush -r /app/drupal8/web migrate-upgrade --configure-only --legacy-db-key=drupal7db --legacy-root=/app/imports/files/
   miip:
     description: Perform a migrate-import
     cmd:
-      - appserver: drush migrate-import
+      - appserver: drush -r /app/drupal8/web migrate-import --all
   mirs:
     description: Perform a migrate-reset-status
     cmd:
-      - appserver: drush migrate-reset-status
+      - appserver: drush -r /app/drupal8/web migrate-reset-status
