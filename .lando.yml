@@ -7,7 +7,7 @@ config:
     database: config/my.cnf
 services:
   appserver:
-    webroot: app/web
+    webroot: drupal8/web
     xdebug: true
     build_as_root:
       - /app/scripts/appserver_build.sh
