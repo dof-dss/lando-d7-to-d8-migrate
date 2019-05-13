@@ -17,7 +17,7 @@ if [ ! -d "/app/drupal8" ]; then
 fi
 
 if [ ! -d "/app/drupal8/private" ]; then
-  echo "Creating private Drupal files diectory"
+  echo "Creating private Drupal files directory"
   mkdir -p /app/drupal8/private
 fi
 

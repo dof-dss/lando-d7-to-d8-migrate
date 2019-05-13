@@ -7,7 +7,6 @@ config:
     database: config/my.cnf
 services:
   appserver:
-    webroot: app/web
     xdebug: true
     build_as_root:
       - /app/scripts/appserver_build.sh
