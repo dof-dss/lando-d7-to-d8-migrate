@@ -10,10 +10,8 @@ fi
 # If we don't have a Drupal 8 install, download it.
 if [ ! -d "/app/drupal8" ]; then
   echo "Downloading Drupal"
-  composer create-project drupal-composer/drupal-project:8.x-dev /app/drupal8 --prefer-dist --no-progress --no-interaction
-  
-  # Download some common migration contrib modules.
-  composer require --dev -d/app/drupal8 drupal/migrate_plus drupal/migrate_tools drupal/migrate_upgrade
+  git clone git@svegit01.thestables.net:dss/nidirect-d8.git /app/drupal8/
+  composer install -d/app/drupal8
 fi
 
 if [ ! -d "/app/drupal8/private" ]; then
