@@ -18,6 +18,10 @@ services:
       password: drupal7
       database: drupal7
 tooling:
+  drck:
+    description: Run drupal-check for Drupal 9 compatibility e.g. 'lando drck ./' 
+    service: appserver
+    cmd: /app/drupal8/vendor/bin/drupal-check
   mi-init:
     description: Initialise some default migration setup.
     service: appserver
