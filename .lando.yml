@@ -19,7 +19,7 @@ services:
       database: drupal7
 tooling:
   drck:
-    description: Run drupal-check for Drupal 9 compatability e.g. 'lando drck ./' 
+    description: Run drupal-check for Drupal 9 compatibility e.g. 'lando drck ./' 
     service: appserver
     cmd: /app/drupal8/vendor/bin/drupal-check
   mi-init:
