@@ -18,10 +18,22 @@ services:
       password: drupal7
       database: drupal7
 tooling:
+  phpunit:
+    description: "Run PHP Unit tests: lando phpunit"
+    service: appserver
+    # cmd: /app/drupal8/vendor/bin/phpunit -c /app/drupal8/phpunit.xml /app/drupal8/web/modules/migrate
+    cmd: "/app/drupal8/vendor/bin/phpunit --debug -c /app/drupal8/phpunit.xml --printer=\\Drupal\\Tests\\Listeners\\HtmlOutputPrinter /app/drupal8/web/modules/migrate"
+  phpcs:
+    description: Run PHPCS checks against all custom Drupal 8 code (modules, migrations, themes) e.g. 'lando phpcs'
+    service: appserver
+    cmd: /app/drupal8/phpcs.sh "/app/drupal8" "/app/drupal8/web/modules/custom /app/drupal8/web/modules/migrate /app/drupal8/web/themes/custom/nidirect"
   drck:
-    description: Run drupal-check for Drupal 9 compatibility e.g. 'lando drck ./' 
+    description: Run drupal-check for Drupal 9 compatibility e.g. 'lando drck ./'
     service: appserver
     cmd: /app/drupal8/vendor/bin/drupal-check
+  drush:
+    server: appserver
+    cmd: drush -r /app/drupal8/web
   mi-init:
     description: Initialise some default migration setup.
     service: appserver
