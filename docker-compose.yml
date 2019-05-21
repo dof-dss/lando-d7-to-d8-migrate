@@ -1,0 +1,14 @@
+version: '3'
+
+services:
+  chromedriver:
+    image: drupalci/chromedriver:production
+    ports:
+      - '80'
+    expose:
+      - "4444"
+    environment:
+      CHROMEDRIVER_WHITELISTED_IPS: ""
+      CHROMEDRIVER_URL_BASE: "/"
+    security_opt:
+      - seccomp:unconfined
