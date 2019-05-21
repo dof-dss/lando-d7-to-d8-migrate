@@ -9,7 +9,7 @@ compose:
   - docker-compose.yml
 services:
   appserver:
-    xdebug: false
+    xdebug: true
     build_as_root:
       - /app/scripts/appserver_build.sh
   drupal7db:
