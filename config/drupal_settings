@@ -24,3 +24,6 @@ $databases['drupal7db']['default'] = array (
   'namespace' => 'Drupal\\Core\\Database\\Driver\\mysql',
   'driver' => 'mysql',
 );
+
+// Prevent SqlBase from moaning.
+$databases['migrate']['default'] = $databases['drupal7db']['default'];
