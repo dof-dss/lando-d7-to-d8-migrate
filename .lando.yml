@@ -1,4 +1,3 @@
-name: d7tod8migrate
 recipe: drupal8
 config:
   webroot: drupal8/web
