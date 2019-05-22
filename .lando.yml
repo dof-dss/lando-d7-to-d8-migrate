@@ -20,6 +20,13 @@ services:
       password: drupal7
       database: drupal7
 tooling:
+  yarn:
+    service: appserver
+    cmd: yarn
+  nightwatch:
+    service: appserver
+    description: "Run Nightwatch.js functional tests"
+    cmd: "cd /app/drupal8/web/core && yarn test:nightwatch"
   phpunit:
     description: "Run PHPUnit tests, e.g. lando phpunit drupal8/web/core/modules"
     service: appserver
