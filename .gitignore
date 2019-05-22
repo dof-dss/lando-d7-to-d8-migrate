@@ -1,4 +1,5 @@
 .DS_Store
+.lando.local.yml
 drupal8
 exports
 imports
