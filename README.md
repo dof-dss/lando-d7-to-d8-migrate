@@ -8,10 +8,11 @@ Ensure you have the following installed:
 Now we can download Drupal 8 and import our Drupal 7 assets.
 
  1. Copy your Drupal 7 database dump to ./imports/data and site files to ./imports/files (Note that you should copy the 'sites' directory into here, so that the path './imports/files/sites/default/files/articles' exists)
- 2. Run *'lando start'*
- 3. Run *'lando db-import -h drupal7db ./imports/data/[SQL DUMP FILENAME].sql'*
- 4. Open your lando site url (displayed at the end of 'lando start', or use *'lando info'*)
- 5. Proceed with the Drupal 8 installation.  
+ 2. Edit .lando.yml and give fill in a unique project name in after the 'name: ' This must be lowercase, no spaces or funky characters, e.g.  name: mydrupal8  
+ 3. Run *'lando start'*
+ 4. Run *'lando db-import -h drupal7db ./imports/data/[SQL DUMP FILENAME].sql'*
+ 5. Open your lando site url (displayed at the end of 'lando start', or use *'lando info'*)
+ 6. Proceed with the Drupal 8 installation.  
 
 ## File structure
 
