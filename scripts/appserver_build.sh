@@ -13,6 +13,7 @@ if [ ! -d "/app/drupal8" ]; then
   git clone git@svegit01.thestables.net:dss/nidirect-d8.git /app/drupal8/
   composer -d/app/drupal8 install
   composer -d/app/drupal8 drupal:scaffold
+  composer -d/app/drupal8 run-script post-install-cmd
 fi
 
 if [ ! -d "/app/drupal8/private" ]; then
