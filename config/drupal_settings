@@ -29,7 +29,7 @@ $databases['drupal7db']['default'] = array (
 $databases['migrate']['default'] = $databases['drupal7db']['default'];
 
 // Custom configuration sync directory under web root.
-$config_directories[CONFIG_SYNC_DIRECTORY] = 'config/sync';
+$config_directories[CONFIG_SYNC_DIRECTORY] = '../config/sync';
 
 #
 #  -:: D7 to D8 Migrate settings end ::-
