@@ -11,7 +11,8 @@ fi
 if [ ! -d "/app/drupal8" ]; then
   echo "Downloading Drupal"
   git clone git@svegit01.thestables.net:dss/nidirect-d8.git /app/drupal8/
-  composer install -d/app/drupal8
+  composer -d/app/drupal8 install 
+  composer -d/app/drupal8 drupal:scaffold 
 fi
 
 if [ ! -d "/app/drupal8/private" ]; then
