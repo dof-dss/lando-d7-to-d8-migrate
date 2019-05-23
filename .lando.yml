@@ -18,9 +18,9 @@ services:
       database: drupal7
 tooling:
   phpunit:
-    description: "Run PHPUnit tests, e.g. lando phpunit -c drupal8/phpunit.xml drupal8/web/core/modules"
+    description: "Run PHPUnit tests. You can specify also options, e.g. --testsuite=unit, or path to module(s) to test."
     service: appserver
-    cmd: /app/drupal8/vendor/bin/phpunit
+    cmd: cd /app/drupal8/web/core && /app/drupal8/vendor/bin/phpunit -c phpunit.xml
   phpcs:
     description: Run PHPCS checks against all custom Drupal 8 code (modules, migrations, themes) e.g. 'lando phpcs'
     service: appserver
