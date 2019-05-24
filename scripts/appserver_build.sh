@@ -1,6 +1,7 @@
 #!/bin/sh
 
 DRUPAL_SETTINGS_FILE=/app/drupal8/web/sites/default/settings.php
+NODE_YARN_INSTALLED=/etc/NODE_YARN_INSTALLED
 
 if [ ! -d "/app/exports" ]; then
   echo "Creating export directories"
@@ -29,4 +30,24 @@ fi
 # Put PHPUnit config in place.
 if [ -f "/app/config/phpunit.lando.xml" ]; then
   ln -sf /app/config/phpunit.lando.xml /app/drupal8/web/core/phpunit.xml
+fi
+
+# Add yarn/nodejs packages to allow functional testing on this service.
+if [ ! -f "$NODE_YARN_INSTALLED" ]; then
+  # Update packages and add gnupg and https for apt to fetch yarn packages.
+  apt update
+  apt install -y gnupg apt-transport-https
+  # Add yarn deb repo.
+  curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
+  echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
+  apt update
+  apt install -y yarn
+  # Add and fetch up to date nodejs to allow yarn to run correctly.
+  curl -sL https://deb.nodesource.com/setup_10.x | bash -
+  apt install -y nodejs
+
+  # Link back to our yarn env file.
+  ln -s /app/config/lando.yarn.env /app/drupal8/web/core/.env
+
+  touch $NODE_YARN_INSTALLED
 fi
