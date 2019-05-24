@@ -27,9 +27,9 @@ tooling:
     description: "Run Nightwatch.js functional tests"
     cmd: "cd /app/drupal8/web/core && yarn test:nightwatch"
   phpunit:
-    description: "Run PHPUnit tests, e.g. lando phpunit drupal8/web/core/modules"
+    description: "Run PHPUnit tests. You can specify also options, e.g. --testsuite=unit, or path to module(s) to test."
     service: appserver
-    cmd: "/app/drupal8/vendor/bin/phpunit --debug --configuration /app/drupal8/phpunit.xml --printer=\\Drupal\\Tests\\Listeners\\HtmlOutputPrinter"
+    cmd: cd /app/drupal8/web/core && /app/drupal8/vendor/bin/phpunit -c phpunit.xml
   phpcs:
     description: Run PHPCS checks against all custom Drupal 8 code (modules, migrations, themes) e.g. 'lando phpcs'
     service: appserver
@@ -38,6 +38,9 @@ tooling:
     description: Run drupal-check for Drupal 9 compatibility e.g. 'lando drck ./'
     service: appserver
     cmd: /app/drupal8/vendor/bin/drupal-check
+  drush:
+    server: appserver
+    cmd: drush -r /app/drupal8/web
   mi-init:
     description: Initialise some default migration setup.
     service: appserver

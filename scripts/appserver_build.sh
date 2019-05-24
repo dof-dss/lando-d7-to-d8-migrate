@@ -12,8 +12,9 @@ fi
 if [ ! -d "/app/drupal8" ]; then
   echo "Downloading Drupal"
   git clone git@svegit01.thestables.net:dss/nidirect-d8.git /app/drupal8/
-  composer -d/app/drupal8 install 
-  composer -d/app/drupal8 drupal:scaffold 
+  composer -d/app/drupal8 install
+  composer -d/app/drupal8 drupal:scaffold
+  composer -d/app/drupal8 run-script post-install-cmd
 fi
 
 if [ ! -d "/app/drupal8/private" ]; then
@@ -24,6 +25,11 @@ fi
 if test -f "$DRUPAL_SETTINGS_FILE"; then
   echo "Updating Drupal Settings File"
   cat /app/config/drupal_settings >> $DRUPAL_SETTINGS_FILE
+fi
+
+# Put PHPUnit config in place.
+if [ -f "/app/config/phpunit.lando.xml" ]; then
+  ln -sf /app/config/phpunit.lando.xml /app/drupal8/web/core/phpunit.xml
 fi
 
 # Add yarn/nodejs packages to allow functional testing on this service.
