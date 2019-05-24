@@ -27,3 +27,14 @@ $databases['drupal7db']['default'] = array (
 
 // Prevent SqlBase from moaning.
 $databases['migrate']['default'] = $databases['drupal7db']['default'];
+
+// Custom configuration sync directory under web root.
+$config_directories[CONFIG_SYNC_DIRECTORY] = '../config/sync';
+
+// Include settings.local.php.
+include $app_root . '/' . $site_path . '/settings.local.php';
+
+#
+#  -:: D7 to D8 Migrate settings end ::-
+#
+
