@@ -25,7 +25,7 @@ if [ ! -d "/app/drupal8/private" ]; then
 fi
 
 # Copy example.settings.local.php for local development settings.
-if test -f "$DRUPAL_LOCAL_SETTINGS_FILE"; then
+if ! [ -f "/app/drupal8/web/sites/default/settings.local.php" ]; then
   echo "Creating settings.local.php"
   cp /app/drupal8/web/sites/example.settings.local.php /app/drupal8/web/sites/default/settings.local.php
 fi
