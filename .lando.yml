@@ -4,6 +4,8 @@ config:
   config:
     php: config/php.ini
     database: config/my.cnf
+compose:
+  - docker-compose.yml
 services:
   appserver:
     xdebug: true
@@ -17,6 +19,13 @@ services:
       password: drupal7
       database: drupal7
 tooling:
+  yarn:
+    service: appserver
+    cmd: yarn
+  nightwatch:
+    service: appserver
+    description: "Run Nightwatch.js functional tests"
+    cmd: "cd /app/drupal8/web/core && yarn test:nightwatch"
   phpunit:
     description: "Run PHPUnit tests. You can specify also options, e.g. --testsuite=unit, or path to module(s) to test."
     service: appserver
