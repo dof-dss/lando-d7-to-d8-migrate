@@ -33,7 +33,7 @@ if ! [ -f "$DRUPAL_LOCAL_SETTINGS_FILE" ]; then
   cp /app/drupal8/web/sites/example.settings.local.php $DRUPAL_LOCAL_SETTINGS_FILE
 fi
 
-# Append our lando specific config to the end of settings.php. 
+# Append our lando specific config to the end of settings.php.
 if ! grep -q "D7 to D8 Migrate settings" "$DRUPAL_SETTINGS_FILE"; then
   echo "Updating settings.php"
   cat /app/config/drupal_settings >> $DRUPAL_SETTINGS_FILE
@@ -61,6 +61,11 @@ if [ ! -f "$NODE_YARN_INSTALLED" ]; then
 
   # Link back to our yarn env file.
   ln -s /app/config/lando.yarn.env /app/drupal8/web/core/.env
+
+  # Fetch and install node packages if they're not already present.
+  if [ ! -d "/app/drupal8/web/core/node_modules" ]; then
+    cd /app/drupal8/web/core && yarn install
+  fi
 
   touch $NODE_YARN_INSTALLED
 fi
