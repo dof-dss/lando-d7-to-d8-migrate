@@ -59,8 +59,14 @@ if [ ! -f "$NODE_YARN_INSTALLED" ]; then
   curl -sL https://deb.nodesource.com/setup_10.x | bash -
   apt install -y nodejs
 
-  # Link back to our yarn env file.
-  ln -s /app/config/lando.yarn.env /app/drupal8/web/core/.env
+  # Copy Drupal .env.example file, inject Lando vars and set in place for use by Nightwatch conf.
+  cat /app/drupal8/web/core/.env.example | sed -e "s|\(^DRUPAL_TEST_BASE_URL\)\(.\+\)|\1=http:\/\/${LANDO_APP_NAME}.${LANDO_DOMAIN}|g" > /app/drupal8/web/core/.env
+  # Alter a few more variables.
+  sed -i -e "s|\(#\)\(DRUPAL_NIGHTWATCH_SEARCH_DIRECTORY\)=|\2=../|g" /app/drupal8/web/core/.env
+  sed -i -e "s|sqlite:\/\/localhost\/sites\/default\/files/db.sqlite|mysql://drupal8:drupal8@database/drupal8|g" /app/drupal8/web/core/.env
+  sed -i -e "s|^DRUPAL_TEST_WEBDRIVER_HOSTNAME=localhost|DRUPAL_TEST_WEBDRIVER_HOSTNAME=chromedriver|g" /app/drupal8/web/core/.env
+  sed -i -e "s|^DRUPAL_TEST_CHROMEDRIVER_AUTOSTART=true|DRUPAL_TEST_CHROMEDRIVER_AUTOSTART=false|g" /app/drupal8/web/core/.env
+  sed -i -e "s|\(#\)\(DRUPAL_TEST_WEBDRIVER_CHROME_ARGS\)=|\2=\"--disable-gpu --headless --no-sandbox\"|g" /app/drupal8/web/core/.env
 
   # Fetch and install node packages if they're not already present.
   if [ ! -d "/app/drupal8/web/core/node_modules" ]; then
