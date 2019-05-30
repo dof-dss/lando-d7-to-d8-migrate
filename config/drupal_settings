@@ -1,4 +1,4 @@
-# 
+#
 #  -:: D7 to D8 Migrate settings ::-
 #
 $settings['file_private_path'] = '../private';
@@ -31,10 +31,15 @@ $databases['migrate']['default'] = $databases['drupal7db']['default'];
 // Custom configuration sync directory under web root.
 $config_directories[CONFIG_SYNC_DIRECTORY] = '../config/sync';
 
+// Memcache - uncomment when required.
+// $settings['cache']['default'] = 'cache.backend.memcache';
+// $settings['memcache']['servers'] = ['memcached:11211' => 'default'];
+
 // Include settings.local.php.
-include $app_root . '/' . $site_path . '/settings.local.php';
+if (file_exists($app_root . '/' . $site_path . '/settings.local.php')) {
+  include $app_root . '/' . $site_path . '/settings.local.php';
+}
 
 #
 #  -:: D7 to D8 Migrate settings end ::-
 #
-

@@ -11,6 +11,9 @@ services:
     xdebug: true
     build_as_root:
       - /app/scripts/appserver_build.sh
+  memcached:
+    type: memcached
+    portforward: true
   drupal7db:
     type: mysql
     portforward: true
