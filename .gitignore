@@ -3,3 +3,11 @@
 drupal8
 exports
 imports
+
+# Ignore IDE / dev tools config
+/nbproject/
+/.idea/
+*.gz
+chrome_devtools
+*.bak
+vm
