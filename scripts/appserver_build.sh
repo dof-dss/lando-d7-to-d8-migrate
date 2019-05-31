@@ -64,9 +64,10 @@ if [ ! -f "$NODE_YARN_INSTALLED" ]; then
   # Alter a few more variables.
   sed -i -e "s|\(#\)\(DRUPAL_NIGHTWATCH_SEARCH_DIRECTORY\)=|\2=../|g" /app/drupal8/web/core/.env
   sed -i -e "s|sqlite:\/\/localhost\/sites\/default\/files/db.sqlite|mysql://drupal8:drupal8@database/drupal8|g" /app/drupal8/web/core/.env
-  sed -i -e "s|^DRUPAL_TEST_WEBDRIVER_HOSTNAME=localhost|DRUPAL_TEST_WEBDRIVER_HOSTNAME=chromedriver|g" /app/drupal8/web/core/.env
+  sed -i -e "s|\(^DRUPAL_TEST_WEBDRIVER_HOSTNAME\)=localhost|\1=chromedriver|g" /app/drupal8/web/core/.env
   sed -i -e "s|^DRUPAL_TEST_CHROMEDRIVER_AUTOSTART=true|DRUPAL_TEST_CHROMEDRIVER_AUTOSTART=false|g" /app/drupal8/web/core/.env
   sed -i -e "s|\(#\)\(DRUPAL_TEST_WEBDRIVER_CHROME_ARGS\)=|\2=\"--disable-gpu --headless --no-sandbox\"|g" /app/drupal8/web/core/.env
+  sed -i -e "s|\(^DRUPAL_NIGHTWATCH_OUTPUT\)=reports/nightwatch|\1=/app/exports/nightwatch-reports|g" /app/drupal8/web/core/.env
 
   # Fetch and install node packages if they're not already present.
   if [ ! -d "/app/drupal8/web/core/node_modules" ]; then
