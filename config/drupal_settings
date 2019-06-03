@@ -35,6 +35,11 @@ $config_directories[CONFIG_SYNC_DIRECTORY] = '../config/sync';
 // $settings['cache']['default'] = 'cache.backend.memcache';
 // $settings['memcache']['servers'] = ['memcached:11211' => 'default'];
 
+// Set config split environment to production. 
+// Copy and reverse the TRUE/FALSE assignment in your settings.local.php file.
+$config['config_split.config_split.config_split_development']['status'] = FALSE;
+$config['config_split.config_split.config_split_production']['status'] = TRUE;
+
 // Include settings.local.php.
 if (file_exists($app_root . '/' . $site_path . '/settings.local.php')) {
   include $app_root . '/' . $site_path . '/settings.local.php';

@@ -14,6 +14,11 @@ Now we can download Drupal 8 and import our Drupal 7 assets.
  5. Open your lando site url (displayed at the end of 'lando start', or use *'lando info'*)
  6. Proceed with the Drupal 8 installation.  
 
+ ## Tips
+ - Create a settings.local.php file to toggle development settings.
+ - Copy the config_split config from settings.php to setting.local.php and reverse the boolean assignment.
+ - Use the 'lando drush/drupal csex' command to import configuration splits.
+
 ## File structure
 
  - **.lando.yml** - Lando recipe file.
