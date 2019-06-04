@@ -6,6 +6,8 @@ config:
     database: config/my.cnf
 compose:
   - docker-compose.yml
+env_file:
+  - config/drupal.env
 services:
   appserver:
     xdebug: true
