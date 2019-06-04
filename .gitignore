@@ -11,3 +11,4 @@ imports
 chrome_devtools
 *.bak
 vm
+.talismanrc
