@@ -1,5 +1,3 @@
-<?php
-
 $settings['file_private_path'] = getenv('FILE_PRIVATE_PATH');
 
 $databases['default']['default'] = [
@@ -33,8 +31,3 @@ $config_directories[CONFIG_SYNC_DIRECTORY] = getenv('CONFIG_SYNC_DIRECTORY');
 // Memcache - uncomment when required.
 // $settings['cache']['default'] = 'cache.backend.memcache';
 $settings['memcache']['servers'] = [sprintf('%s:%s', getenv('MEMCACHE_HOSTNAME'), getenv('MEMCACHE_PORT')) => 'default'];
-
-// Include settings.local.php.
-if (file_exists($app_root . '/' . $site_path . '/settings.local.php')) {
-  include $app_root . '/' . $site_path . '/settings.local.php';
-}
