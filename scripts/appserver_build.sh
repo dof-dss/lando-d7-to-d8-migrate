@@ -4,6 +4,7 @@ DRUPAL_REPO_URL=git@svegit01.thestables.net:dss/nidirect-d8.git
 DRUPAL_SETTINGS_FILE=/app/drupal8/web/sites/default/settings.php
 DRUPAL_LOCAL_SETTINGS_FILE=/app/drupal8/web/sites/default/settings.local.php
 NODE_YARN_INSTALLED=/etc/NODE_YARN_INSTALLED
+DRUPAL_LOCAL_CONF=/etc/DRUPAL_LOCAL_CONF
 
 # Create export directories for config and data.
 if [ ! -d "/app/exports" ]; then
@@ -27,16 +28,24 @@ if [ ! -d "/app/drupal8/private" ]; then
   mkdir -p /app/drupal8/private
 fi
 
-# Copy example.settings.local.php for local development settings.
-if ! [ -f "$DRUPAL_LOCAL_SETTINGS_FILE" ]; then
-  echo "Creating settings.local.php"
-  cp /app/drupal8/web/sites/example.settings.local.php $DRUPAL_LOCAL_SETTINGS_FILE
-fi
+# Copy settings.local.php for local development settings.
+if ! [ -f "$DRUPAL_LOCAL_CONF" ]; then
+  chmod -R +rw /app/drupal8/web/sites/default
+  cp -v /app/drupal8/web/sites/default/default.settings.php /app/drupal8/web/sites/default/settings.php
 
-# Append our lando specific config to the end of settings.php.
-if ! grep -q "D7 to D8 Migrate settings" "$DRUPAL_SETTINGS_FILE"; then
-  echo "Updating settings.php"
-  cat /app/config/drupal_settings >> $DRUPAL_SETTINGS_FILE
+  echo "Creating settings.local.php"
+  cp -v /app/config/settings.local.php $DRUPAL_LOCAL_SETTINGS_FILE
+
+  echo "Including settings.local.php at end of settings.php"
+  cat << EOF >> $DRUPAL_SETTINGS_FILE
+if (file_exists(\$app_root . '/' . \$site_path . '/settings.local.php')) {
+  include \$app_root . '/' . \$site_path . '/settings.local.php';
+}
+EOF
+  chmod -w /app/drupal8/web/sites/default
+
+  # Set a marker to say we're done.
+  touch $DRUPAL_LOCAL_CONF
 fi
 
 # Put PHPUnit config in place.
