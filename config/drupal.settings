@@ -31,3 +31,6 @@ $config_directories[CONFIG_SYNC_DIRECTORY] = getenv('CONFIG_SYNC_DIRECTORY');
 // Memcache - uncomment when required.
 // $settings['cache']['default'] = 'cache.backend.memcache';
 $settings['memcache']['servers'] = [sprintf('%s:%s', getenv('MEMCACHE_HOSTNAME'), getenv('MEMCACHE_PORT')) => 'default'];
+
+// Site hash salt.
+$settings['hash_salt'] = $_ENV['HASH_SALT'];
