@@ -72,3 +72,27 @@ if [ ! -f "$NODE_YARN_INSTALLED" ]; then
 
   touch $NODE_YARN_INSTALLED
 fi
+
+# Add talismanrc to all known repos in this project, so we don't accidentally commit anything sensitive.
+cp /app/config/talismanrc /app/.talismanrc
+cp /app/config/talismanrc /app/drupal8/.talismanrc
+cp /app/config/talismanrc /app/drupal8/web/modules/migrate/nidirect-migrations/.talismanrc
+
+cat << EOF
+
+###########################################################
+⚠️         INSTALL TALISMAN FOR LOCAL DEVELOPMENT        ⚠️
+
+You are *STRONGLY* recommend to use Talisman (by Thoughtworks) to ensure that potential secrets or sensitive information do not leave your workstation:
+
+Talisman runs on your host OS and scans your commits against open-source detector plugins for things like auth tokens, SSH keys, credit card numbers, unusual binary files that might represent unwanted sensitive data in a repository. If it finds something, it'll reject your local commit and tell you, allowing you to fix it or tell Talisman to ignore a false-positive.
+
+🔮 Talisman is most effective as a global pre-commit git hook but can work on pre-push events too.
+🔮 You can install it per repository, but it's more fiddly to use.
+🔮 You need to install it on your HOST system, not in a container or guest VM, sorry!
+🔮 It's a one-off task. But you should, it could save you a very awkward conversation in future.
+
+👉 Follow the instructions at https://github.com/thoughtworks/talisman#installation-as-a-global-hook-template
+   and develop with confidence!
+
+EOF
