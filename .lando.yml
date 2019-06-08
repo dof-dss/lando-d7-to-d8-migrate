@@ -63,6 +63,10 @@ tooling:
     description: Perform a migrate-import
     cmd:
       - appserver: drush -r /app/drupal8/web migrate-import
+  mirb:
+    description: Perform a migrate-rollback
+    cmd:
+      - appserver: drupal -r /app/drupal8/web migrate-rollback --source-base_path=/app/drupal8/web
   mirs:
     description: Perform a migrate-reset-status
     cmd:
