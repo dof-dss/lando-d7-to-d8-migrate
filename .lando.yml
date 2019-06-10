@@ -42,15 +42,10 @@ tooling:
   drck:
     description: Run drupal-check for Drupal 9 compatibility e.g. 'lando drck ./'
     service: appserver
-    cmd: /app/drupal8/vendor/bin/drupal-check
+    cmd: drupal-check
   drush:
     server: appserver
     cmd: drush -r /app/drupal8/web
-  mi-init:
-    description: Initialise some default migration setup.
-    service: appserver
-    cmd: /app/scripts/mi-init.sh
-    user: root
   mist:
     description: View migration status
     cmd:
@@ -65,6 +60,10 @@ tooling:
     description: Perform a migrate-import
     cmd:
       - appserver: drush -r /app/drupal8/web migrate-import
+  mirb:
+    description: Perform a migrate-rollback
+    cmd:
+      - appserver: drupal -r /app/drupal8/web migrate-rollback --source-base_path=/app/drupal8/web
   mirs:
     description: Perform a migrate-reset-status
     cmd:

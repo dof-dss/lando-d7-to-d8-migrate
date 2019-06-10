@@ -71,6 +71,14 @@ if [ ! -f "$NODE_YARN_INSTALLED" ]; then
   fi
 
   touch $NODE_YARN_INSTALLED
+
+  # Install drupal-check for compatibility checks. 
+  if ! [ -f "/usr/local/bin/drupal-check" ]; then
+    curl -O -L https://github.com/mglaman/drupal-check/releases/latest/download/drupal-check.phar
+    mv drupal-check.phar /usr/local/bin/drupal-check
+    chmod +x /usr/local/bin/drupal-check
+  fi
+
 fi
 
 # Add talismanrc to all known repos in this project, so we don't accidentally commit anything sensitive.
