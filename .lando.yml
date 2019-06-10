@@ -44,11 +44,6 @@ tooling:
   drush:
     server: appserver
     cmd: drush -r /app/drupal8/web
-  mi-init:
-    description: Initialise some default migration setup.
-    service: appserver
-    cmd: /app/scripts/mi-init.sh
-    user: root
   mist:
     description: View migration status
     cmd:
