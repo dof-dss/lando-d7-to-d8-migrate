@@ -1,6 +1,7 @@
 #!/bin/sh
 
 DRUPAL_REPO_URL=git@svegit01.thestables.net:dss/nidirect-d8.git
+DRUPAL_CUSTOM_CODE_REPO=git@svegit01.thestables.net:dss/nidirect-site-modules.git
 DRUPAL_SETTINGS_FILE=/app/drupal8/web/sites/default/settings.php
 NODE_YARN_INSTALLED=/etc/NODE_YARN_INSTALLED
 
@@ -18,6 +19,12 @@ if [ ! -d "/app/drupal8" ]; then
   echo "Building Drupal files"
   composer -d/app/drupal8 drupal:scaffold
   composer -d/app/drupal8 run-script post-install-cmd
+fi
+
+# Checkout custom code repo if we don't have it.
+if [ ! -d "/app/drupal8/web/modules/custom" ]; then
+  echo "Cloning custom code repository"
+  cd /app/drupal8/web/modules && git clone $DRUPAL_CUSTOM_CODE_REPO custom
 fi
 
 # Create Drupal private file directory above web root.
@@ -72,7 +79,7 @@ if [ ! -f "$NODE_YARN_INSTALLED" ]; then
 
   touch $NODE_YARN_INSTALLED
 
-  # Install drupal-check for compatibility checks. 
+  # Install drupal-check for compatibility checks.
   if ! [ -f "/usr/local/bin/drupal-check" ]; then
     curl -O -L https://github.com/mglaman/drupal-check/releases/latest/download/drupal-check.phar
     mv drupal-check.phar /usr/local/bin/drupal-check
