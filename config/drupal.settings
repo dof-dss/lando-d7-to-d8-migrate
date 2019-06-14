@@ -33,4 +33,17 @@ $config_directories[CONFIG_SYNC_DIRECTORY] = getenv('CONFIG_SYNC_DIRECTORY');
 $settings['memcache']['servers'] = [sprintf('%s:%s', getenv('MEMCACHE_HOSTNAME'), getenv('MEMCACHE_PORT')) => 'default'];
 
 // Site hash salt.
-$settings['hash_salt'] = $_ENV['HASH_SALT'];
+$settings['hash_salt'] = getenv('HASH_SALT');
+
+// Config readonly settings.
+$settings['config_readonly'] = getenv('CONFIG_READONLY');
+
+if (PHP_SAPI === 'cli') {
+  // Override for drupal console/drush client.
+  $settings['config_readonly'] = FALSE;
+}
+
+// Configuration that is allowed to be changed in readonly environments.
+$settings['config_readonly_whitelist_patterns'] = [
+  'system.site',
+];
