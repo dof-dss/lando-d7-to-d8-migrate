@@ -47,3 +47,6 @@ if (PHP_SAPI === 'cli') {
 $settings['config_readonly_whitelist_patterns'] = [
   'system.site',
 ];
+
+// Environment indicator config.
+$settings['simple_environment_indicator'] = sprintf('%s %s', getenv('SIMPLEI_ENV_COLOUR'), getenv('SIMPLEI_ENV_NAME'));
