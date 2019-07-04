@@ -70,9 +70,15 @@ if [ ! -f "$NODE_YARN_INSTALLED" ]; then
     cd /app/drupal8/web/core && yarn install
   fi
 
+  # Install any known extra npm packges for, eg: migrations.
+  if [ ! -d "/app/drupal8/web/modules/migrate/nidirect-migrations/migrate_nidirect_node/node_modules" ]; then
+    cd /app/drupal8/web/modules/migrate/nidirect-migrations/migrate_nidirect_node
+    npm install
+  fi
+
   touch $NODE_YARN_INSTALLED
 
-  # Install drupal-check for compatibility checks. 
+  # Install drupal-check for compatibility checks.
   if ! [ -f "/usr/local/bin/drupal-check" ]; then
     curl -O -L https://github.com/mglaman/drupal-check/releases/latest/download/drupal-check.phar
     mv drupal-check.phar /usr/local/bin/drupal-check
