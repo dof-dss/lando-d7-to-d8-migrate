@@ -35,7 +35,8 @@ cat /app/config/drupal.settings >> $DRUPAL_SETTINGS_FILE
 
 chmod -w /app/drupal8/web/sites/default
 
-# Put PHPUnit config in place.
+# Set Simple test variable and put PHPUnit config in place.
+sed -i -e "s|name=\"SIMPLETEST_BASE_URL\" value=\"\"|name=\"SIMPLETEST_BASE_URL\" value=\"http:\/\/${LANDO_APP_NAME}.${LANDO_DOMAIN}\"|g" /app/config/phpunit.lando.xml
 if [ -f "/app/config/phpunit.lando.xml" ]; then
   echo "Copying PHPUnit config to Drupal webroot"
   ln -sf /app/config/phpunit.lando.xml /app/drupal8/web/core/phpunit.xml
