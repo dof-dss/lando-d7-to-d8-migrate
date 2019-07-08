@@ -70,7 +70,7 @@ tooling:
   mirb:
     description: Perform a migrate-rollback
     cmd:
-      - appserver: drupal -r /app/drupal8/web migrate-rollback --source-base_path=/app/drupal8/web
+      - appserver: drupal --root=/app/drupal8/web migrate:rollback --source-base_path=/app/drupal8/web
   mirs:
     description: Perform a migrate-reset-status
     cmd:
