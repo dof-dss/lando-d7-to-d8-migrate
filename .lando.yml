@@ -23,6 +23,18 @@ services:
       user: drupal7
       password: drupal7
       database: drupal7
+  solr-default:
+    type: solr:7
+    portforward: true
+    core: default
+    config:
+      dir: drupal8/web/modules/contrib/search_api_solr/solr-conf-templates/7.x
+  solr-healthconditions:
+    type: solr:7
+    portforward: true
+    core: healthconditions
+    config:
+      dir: drupal8/web/modules/contrib/search_api_solr/solr-conf-templates/7.x
 tooling:
   yarn:
     service: appserver
