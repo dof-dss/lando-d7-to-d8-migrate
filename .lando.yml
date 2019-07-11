@@ -28,13 +28,13 @@ services:
     portforward: true
     core: default
     config:
-      dir: drupal8/web/modules/contrib/search_api_solr/solr-conf-templates/7.x
+      dir: drupal8/web/modules/contrib/search_api_solr/solr-conf-templates/7.x/default
   solr-healthconditions:
     type: solr:7
     portforward: true
     core: healthconditions
     config:
-      dir: drupal8/web/modules/contrib/search_api_solr/solr-conf-templates/7.x
+      dir: drupal8/web/modules/contrib/search_api_solr/solr-conf-templates/7.x/healthconditions
 tooling:
   yarn:
     service: appserver
