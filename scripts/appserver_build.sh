@@ -77,6 +77,11 @@ if [ ! -f "$NODE_YARN_INSTALLED" ]; then
     npm install
   fi
 
+  if [ ! -d "/app/drupal8/web/modules/custom/node_modules" ]; then
+    cd /app/drupal8/web/modules/custom
+    npm install
+  fi
+
   touch $NODE_YARN_INSTALLED
 
   # Install drupal-check for compatibility checks.
