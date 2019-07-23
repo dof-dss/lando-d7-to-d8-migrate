@@ -2,6 +2,7 @@
 
 DRUPAL_REPO_URL=git@svegit01.thestables.net:dss/nidirect-d8.git
 DRUPAL_SETTINGS_FILE=/app/drupal8/web/sites/default/settings.php
+DRUPAL_SERVICES_FILE=/app/drupal8/web/sites/default/services.yml
 NODE_YARN_INSTALLED=/etc/NODE_YARN_INSTALLED
 
 # Create export directories for config and data.
@@ -32,6 +33,12 @@ cp -v /app/drupal8/web/sites/default/default.settings.php $DRUPAL_SETTINGS_FILE
 
 echo "Append local environment settings to settings.php file"
 cat /app/config/drupal.settings >> $DRUPAL_SETTINGS_FILE
+
+# Copy default services config and replace key values for local development.
+cp /app/config/default.services.yml $DRUPAL_SERVICES_FILE
+sed -i -e "s|\(gc_maxlifetime\:\) \(200000\)|\1 86400|g" $DRUPAL_SERVICES_FILE
+sed -i -e "s|\(cookie_lifetime\:\) \(2000000\)|\1 86400|g" $DRUPAL_SERVICES_FILE
+sed -i -e "s|\(http.response.debug_cacheability_headers\: \)|\1 false|g" $DRUPAL_SERVICES_FILE
 
 chmod -w /app/drupal8/web/sites/default
 
