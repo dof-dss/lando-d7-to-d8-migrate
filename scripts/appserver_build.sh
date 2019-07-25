@@ -1,6 +1,6 @@
 #!/bin/sh
 
-DRUPAL_REPO_URL=git@svegit01.thestables.net:dss/nidirect-d8.git
+DRUPAL_REPO_URL=git@github.com:dof-dss/nidirect-drupal.git
 DRUPAL_SETTINGS_FILE=/app/drupal8/web/sites/default/settings.php
 DRUPAL_SERVICES_FILE=/app/drupal8/web/sites/default/services.yml
 NODE_YARN_INSTALLED=/etc/NODE_YARN_INSTALLED
