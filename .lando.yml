@@ -1,6 +1,7 @@
 recipe: drupal8
 config:
   webroot: drupal8/web
+  database: mariadb
   config:
     php: config/php.ini
     database: config/my.cnf
@@ -17,7 +18,7 @@ services:
     type: memcached
     portforward: true
   drupal7db:
-    type: mysql
+    type: mariadb
     portforward: true
     creds:
       user: drupal7
