@@ -52,9 +52,9 @@ tooling:
                   lando nightwatch --skiptags core\n"
     cmd: "yarn --cwd=/app/drupal8/web/core test:nightwatch"
   phpunit:
-    description: "Run PHPUnit tests. You can specify also options, e.g. --testsuite=unit, or path to module(s) to test."
+    description: "Run PHPUnit tests. You can pass options, e.g. --group=nidirect, as you require"
     service: appserver
-    cmd: cd /app/drupal8/web/core && /app/drupal8/vendor/bin/phpunit -c phpunit.xml
+    cmd: cd /app/drupal8/web/core && /app/drupal8/vendor/bin/phpunit -c /app/drupal8/web/core/phpunit.xml
   phpcs:
     description: Run PHPCS checks against all custom Drupal 8 code (modules, migrations, themes) e.g. 'lando phpcs'
     service: appserver

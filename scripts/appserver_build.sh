@@ -46,7 +46,7 @@ chmod -w /app/drupal8/web/sites/default
 sed -i -e "s|name=\"SIMPLETEST_BASE_URL\" value=\"\"|name=\"SIMPLETEST_BASE_URL\" value=\"http:\/\/${LANDO_APP_NAME}.${LANDO_DOMAIN}\"|g" /app/config/phpunit.lando.xml
 if [ -f "/app/config/phpunit.lando.xml" ]; then
   echo "Copying PHPUnit config to Drupal webroot"
-  ln -sf /app/config/phpunit.lando.xml /app/drupal8/web/core/phpunit.xml
+  cp /app/config/phpunit.lando.xml /app/drupal8/web/core/phpunit.xml
 fi
 
 # Add yarn/nodejs packages to allow functional testing on this service.
