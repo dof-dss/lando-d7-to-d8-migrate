@@ -8,7 +8,7 @@ config:
 compose:
   - docker-compose.yml
 env_file:
-  - config/drupal.env
+  - config/local.envvars
 services:
   appserver:
     xdebug: true
@@ -58,7 +58,7 @@ tooling:
   phpcs:
     description: Run PHPCS checks against all custom Drupal 8 code (modules, migrations, themes) e.g. 'lando phpcs'
     service: appserver
-    cmd: /app/drupal8/phpcs.sh "/app/drupal8" "/app/drupal8/web/modules/custom /app/drupal8/web/modules/migrate /app/drupal8/web/themes/custom"
+    cmd: /app/drupal8/phpcs.sh "/app/drupal8" "/app/drupal8/web/modules/custom /app/drupal8/web/modules/migrate /app/drupal8/web/themes/custom /app/drupal8/web/profiles/custom"
   drck:
     description: Run drupal-check for Drupal 9 compatibility e.g. 'lando drck ./'
     service: appserver
