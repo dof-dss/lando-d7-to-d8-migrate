@@ -1,8 +1,17 @@
 #!/bin/sh
 
+# Variables to indicate key settings files or directories for Drupal.
 DRUPAL_REPO_URL=git@github.com:dof-dss/nidirect-drupal.git
-DRUPAL_SETTINGS_FILE=/app/drupal8/web/sites/default/settings.php
-DRUPAL_SERVICES_FILE=/app/drupal8/web/sites/default/services.yml
+
+DRUPAL_ROOT=/app/drupal8/web
+DRUPAL_SETTINGS_FILE=$DRUPAL_ROOT/sites/default/settings.php
+DRUPAL_SERVICES_FILE=$DRUPAL_ROOT/sites/default/services.yml
+DRUPAL_CUSTOM_CODE=$DRUPAL_ROOT/modules/custom
+DRUPAL_MIGRATE_CODE=$DRUPAL_ROOT/modules/migrate/nidirect-migrations
+DRUPAL_TEST_PROFILE=$DRUPAL_ROOT/profiles/custom/test_profile
+
+# Semaphore files to control whether we need to trigger an install
+# of supporting software or config files.
 NODE_YARN_INSTALLED=/etc/NODE_YARN_INSTALLED
 
 # Create export directories for config and data.
@@ -28,8 +37,8 @@ if [ ! -d "/app/drupal8/private" ]; then
 fi
 
 # Set local environment settings at end of settings.php file.
-chmod -R +rw /app/drupal8/web/sites/default
-cp -v /app/drupal8/web/sites/default/default.settings.php $DRUPAL_SETTINGS_FILE
+chmod -R +rw $DRUPAL_ROOT/sites/default
+cp -v $DRUPAL_ROOT/sites/default/default.settings.php $DRUPAL_SETTINGS_FILE
 
 echo "Append local environment settings to settings.php file"
 cat /app/config/drupal.settings >> $DRUPAL_SETTINGS_FILE
@@ -40,13 +49,20 @@ sed -i -e "s|\(gc_maxlifetime\:\) \(200000\)|\1 86400|g" $DRUPAL_SERVICES_FILE
 sed -i -e "s|\(cookie_lifetime\:\) \(2000000\)|\1 86400|g" $DRUPAL_SERVICES_FILE
 sed -i -e "s|\(http.response.debug_cacheability_headers\: \)|\1 false|g" $DRUPAL_SERVICES_FILE
 
-chmod -w /app/drupal8/web/sites/default
+chmod -w $DRUPAL_ROOT/sites/default
 
-# Set Simple test variable and put PHPUnit config in place.
-sed -i -e "s|name=\"SIMPLETEST_BASE_URL\" value=\"\"|name=\"SIMPLETEST_BASE_URL\" value=\"http:\/\/${LANDO_APP_NAME}.${LANDO_DOMAIN}\"|g" /app/config/phpunit.lando.xml
-if [ -f "/app/config/phpunit.lando.xml" ]; then
-  echo "Copying PHPUnit config to Drupal webroot"
-  cp /app/config/phpunit.lando.xml /app/drupal8/web/core/phpunit.xml
+# Set Simple test variables and put PHPUnit config in place.
+if [ ! -f "${DRUPAL_ROOT}/core/phpunit.xml" ]; then
+  echo "Adding localised PHPUnit config to Drupal webroot"
+  $DRUPAL_ROOT/core/phpunit.xml.dist $DRUPAL_ROOT/core/phpunit.xml
+  # Fix bootstrap path
+  sed -i -e "s|bootstrap=\"tests/bootstrap.php\"|bootstrap=\"${DRUPAL_ROOT}/core/tests/bootstrap.php\"|g" $DRUPAL_ROOT/core/phpunit.xml
+  # Inject database params for kernel tests.
+  sed -i -e "s|name=\"SIMPLETEST_DB\" value=\"\"|name=\"SIMPLETEST_DB\" value="${DB_DRIVER}://${DB_USER}:${DB_PASS}@${DB_HOST}/${DB_NAME}"|g" $DRUPAL_ROOT/core/phpunit.xml
+  # Uncomment option to switch off Symfony deprecatons helper (we use drupal-check for this).
+  sed -i -e "s|<!-- <env name=\"SYMFONY_DEPRECATIONS_HELPER\" value=\"disabled\"/> -->|<env name=\"SYMFONY_DEPRECATIONS_HELPER\" value=\"disabled\"/>|g" $DRUPAL_ROOT/core/phpunit.xml
+  # Set the base URL for kernel tests.
+  sed -i -e "s|name=\"SIMPLETEST_BASE_URL\" value=\"\"|name=\"SIMPLETEST_BASE_URL\" value=\"http:\/\/${LANDO_APP_NAME}.${LANDO_DOMAIN}\"|g" $DRUPAL_ROOT/core/phpunit.xml
 fi
 
 # Add yarn/nodejs packages to allow functional testing on this service.
@@ -64,62 +80,67 @@ if [ ! -f "$NODE_YARN_INSTALLED" ]; then
   apt install -y nodejs
 
   # Copy Drupal .env.example file, inject Lando vars and set in place for use by Nightwatch conf.
-  cat /app/drupal8/web/core/.env.example | sed -e "s|\(^DRUPAL_TEST_BASE_URL\)\(.\+\)|\1=http:\/\/${LANDO_APP_NAME}.${LANDO_DOMAIN}|g" > /app/drupal8/web/core/.env
+  cat $DRUPAL_ROOT/core/.env.example | sed -e "s|\(^DRUPAL_TEST_BASE_URL\)\(.\+\)|\1=http:\/\/${LANDO_APP_NAME}.${LANDO_DOMAIN}|g" > $DRUPAL_ROOT/core/.env
   # Alter a few more variables.
-  sed -i -e "s|\(#\)\(DRUPAL_NIGHTWATCH_SEARCH_DIRECTORY\)=|\2=../|g" /app/drupal8/web/core/.env
-  sed -i -e "s|sqlite:\/\/localhost\/sites\/default\/files/db.sqlite|mysql://drupal8:drupal8@database/drupal8|g" /app/drupal8/web/core/.env
-  sed -i -e "s|\(^DRUPAL_TEST_WEBDRIVER_HOSTNAME\)=localhost|\1=chromedriver|g" /app/drupal8/web/core/.env
-  sed -i -e "s|^DRUPAL_TEST_CHROMEDRIVER_AUTOSTART=true|DRUPAL_TEST_CHROMEDRIVER_AUTOSTART=false|g" /app/drupal8/web/core/.env
-  sed -i -e "s|\(#\)\(DRUPAL_TEST_WEBDRIVER_CHROME_ARGS\)=|\2=\"--disable-gpu --headless --no-sandbox\"|g" /app/drupal8/web/core/.env
-  sed -i -e "s|\(^DRUPAL_NIGHTWATCH_OUTPUT\)=reports/nightwatch|\1=/app/exports/nightwatch-reports|g" /app/drupal8/web/core/.env
+  sed -i -e "s|\(#\)\(DRUPAL_NIGHTWATCH_SEARCH_DIRECTORY\)=|\2=../|g" $DRUPAL_ROOT/core/.env
+  sed -i -e "s|sqlite:\/\/localhost\/sites\/default\/files/db.sqlite|${DB_DRIVER}://${DB_USER}:${DB_PASS}@${DB_HOST}/${DB_NAME}|g" $DRUPAL_ROOT/core/.env
+  sed -i -e "s|\(^DRUPAL_TEST_WEBDRIVER_HOSTNAME\)=localhost|\1=chromedriver|g" $DRUPAL_ROOT/core/.env
+  sed -i -e "s|^DRUPAL_TEST_CHROMEDRIVER_AUTOSTART=true|DRUPAL_TEST_CHROMEDRIVER_AUTOSTART=false|g" $DRUPAL_ROOT/core/.env
+  sed -i -e "s|\(#\)\(DRUPAL_TEST_WEBDRIVER_CHROME_ARGS\)=|\2=\"--disable-gpu --headless --no-sandbox\"|g" $DRUPAL_ROOT/core/.env
+  sed -i -e "s|\(^DRUPAL_NIGHTWATCH_OUTPUT\)=reports/nightwatch|\1=/app/exports/nightwatch-reports|g" $DRUPAL_ROOT/core/.env
 
   # Fetch and install node packages if they're not already present.
-  if [ ! -d "/app/drupal8/web/core/node_modules" ]; then
-    cd /app/drupal8/web/core && yarn install
+  if [ ! -d "${DRUPAL_ROOT}/core/node_modules" ]; then
+    cd $DRUPAL_ROOT/core && yarn install
   fi
 
   # Install any known extra npm packges for, eg: migrations.
-  if [ ! -d "/app/drupal8/web/modules/migrate/nidirect-migrations/migrate_nidirect_node/node_modules" ]; then
-    cd /app/drupal8/web/modules/migrate/nidirect-migrations/migrate_nidirect_node
+  if [ ! -d "${DRUPAL_MIGRATE_CODE}/migrate_nidirect_node/node_modules" ]; then
+    cd $DRUPAL_MIGRATE_CODE/migrate_nidirect_node
     npm install
   fi
 
-  if [ ! -d "/app/drupal8/web/modules/custom/node_modules" ]; then
-    cd /app/drupal8/web/modules/custom
+  if [ ! -d "${DRUPAL_CUSTOM_CODE}/node_modules" ]; then
+    cd $DRUPAL_CUSTOM_CODE
     npm install
   fi
 
   touch $NODE_YARN_INSTALLED
 
-  # Install drupal-check for compatibility checks.
-  if ! [ -f "/usr/local/bin/drupal-check" ]; then
-    curl -O -L https://github.com/mglaman/drupal-check/releases/latest/download/drupal-check.phar
-    mv drupal-check.phar /usr/local/bin/drupal-check
-    chmod +x /usr/local/bin/drupal-check
-  fi
-
 fi
 
 # Add talismanrc to all known repos in this project, so we don't accidentally commit anything sensitive.
-cp /app/config/talismanrc /app/.talismanrc
-cp /app/config/talismanrc /app/drupal8/.talismanrc
-cp /app/config/talismanrc /app/drupal8/web/modules/migrate/nidirect-migrations/.talismanrc
+echo "Adding talismanrc files to repos in this project"
+cp /app/config/talisman.config /app/.talismanrc
+cp /app/config/talisman.config /app/drupal8/.talismanrc
+cp /app/config/talisman.config $DRUPAL_MIGRATE_CODE/.talismanrc
+cp /app/config/talisman.config $DRUPAL_CUSTOM_CODE/.talismanrc
+cp /app/config/talisman.config $DRUPAL_TEST_PROFILE/.talismanrc
 
 cat << EOF
 
-###########################################################
-⚠️         INSTALL TALISMAN FOR LOCAL DEVELOPMENT        ⚠️
+===============================================================================
+⚠️                  INSTALL TALISMAN FOR LOCAL DEVELOPMENT                   ⚠️
 
-You are *STRONGLY* recommend to use Talisman (by Thoughtworks) to ensure that potential secrets or sensitive information do not leave your workstation:
+You are *STRONGLY* recommend to use Talisman (by Thoughtworks) to ensure that
+potential secrets or sensitive information do not leave your workstation.
 
-Talisman runs on your host OS and scans your commits against open-source detector plugins for things like auth tokens, SSH keys, credit card numbers, unusual binary files that might represent unwanted sensitive data in a repository. If it finds something, it'll reject your local commit and tell you, allowing you to fix it or tell Talisman to ignore a false-positive.
+Talisman runs on your host OS and scans your commits against open-source
+detector plugins for things such as auth tokens, SSH keys, credit card numbers
+or large binary files that can indicate unwanted data in a repository.
 
-🔮 Talisman is most effective as a global pre-commit git hook but can work on pre-push events too.
-🔮 You can install it per repository, but it's more fiddly to use.
-🔮 You need to install it on your HOST system, not in a container or guest VM, sorry!
-🔮 It's a one-off task. But you should, it could save you a very awkward conversation in future.
+If it finds something suspicious it will reject your local commit and tell you,
+allowing you to fix it or tell Talisman to ignore a false-positive.
 
-👉 Follow the instructions at https://github.com/thoughtworks/talisman#installation-as-a-global-hook-template
-   and develop with confidence!
+PLEASE NOTE:
+
+- You need to install Talisman on your HOST system.
+- Talisman is most effective as a global pre-commit git hook.
+- You can install it per repository but it requires more configuration on your part.
+- It is a one-off task, but it can save you a very awkward conversation in future.
+
+INSTALLATION:
+
+👉 https://github.com/thoughtworks/talisman#installation-as-a-global-hook-template
 
 EOF
