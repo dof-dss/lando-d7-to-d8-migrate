@@ -62,7 +62,7 @@ tooling:
   drck:
     description: Run drupal-check for Drupal 9 compatibility e.g. 'lando drck ./'
     service: appserver
-    cmd: drupal-check
+    cmd: /app/drupal8/vendor/bin/drupal-check
   drush:
     server: appserver
     cmd: drush -r /app/drupal8/web
