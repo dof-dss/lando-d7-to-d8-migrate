@@ -32,6 +32,11 @@ $config_directories[CONFIG_SYNC_DIRECTORY] = getenv('CONFIG_SYNC_DIRECTORY');
 // $settings['cache']['default'] = 'cache.backend.memcache';
 $settings['memcache']['servers'] = [sprintf('%s:%s', getenv('MEMCACHE_HOSTNAME'), getenv('MEMCACHE_PORT')) => 'default'];
 
+// Set config split environment.
+$config['config_split.config_split.local']['status'] = TRUE;
+$config['config_split.config_split.development']['status'] = FALSE;
+$config['config_split.config_split.pre-production']['status'] = FALSE;
+
 // Site hash salt.
 $settings['hash_salt'] = getenv('HASH_SALT');
 
