@@ -7,19 +7,17 @@ Ensure you have the following installed:
 
 Now we can download Drupal 8 and import our Drupal 7 assets.
 
- 1. Copy your Drupal 7 database dump to ./imports/data and site files to ./imports/files (Note that you should copy the 'sites' directory into here, so that the path './imports/files/sites/default/files/articles' exists)
- 2. Make a copy of .lando.example.yml naming it .lando.local.yml and edit with your own unique project name. This must be lowercase, no spaces or funky characters.
- 3. Run *'lando start'*
- 4. Run *'lando db-import -h drupal7db ./imports/data/[SQL DUMP FILENAME].sql'*
- 5. Open your lando site url (displayed at the end of 'lando start', or use *'lando info'*)
- 6. Proceed with the Drupal 8 installation.
+ 1. Copy your Drupal 7 database dump to `./imports/data` and site files to `./imports/files` (Note that you should copy the 'sites' directory into here, so that the path `./imports/files/sites/default/files/articles` exists)
+ 2. Make a copy of `.lando.example.yml` naming it `.lando.local.yml` and edit with your own unique project name. This must be lowercase, no spaces or funky characters.
+ 3. Run `lando start`
+ 4. Run `lando db-import -h drupal7db ./imports/data/[SQL DUMP FILENAME].sql`
+ 5. Open your lando site url (displayed at the end of `lando start`, or use `lando info`)
+ 6. Proceed with the Drupal 8 installation.  
 
  ## Tips
  - Create a settings.local.php file to toggle development settings.
  - Copy the config_split config from settings.php to setting.local.php and reverse the boolean assignment.
  - Use the 'lando drush/drupal csex' command to import configuration splits.
-
- > TODO: Clarify csex command
 
 ## File structure
 
@@ -31,11 +29,11 @@ Now we can download Drupal 8 and import our Drupal 7 assets.
 	 - **data** - Database dumps.
  - **imports** - Drupal 7 imports
 	 - **data** - Database dumps (to import to drupal7db container).
-	 - **files** - /sites/default/files from Drupal 7 (Note that you should copy the 'sites' directory into here, so that the path './imports/files/sites/default/files/articles' exists)
+	 - **files** - `/sites/default/files` from Drupal 7 (Note that you should copy the 'sites' directory into here, so that the path `./imports/files/sites/default/files/articles` exists)
  - **scripts** - Utilities, site and DB scripts.
 
 ## Migration tools
-Run the following utils using: *lando [command]*
+Run the following utils using: `lando [command]`
 
  - **mi-init** - Migration init: Runs common migrate clean/setup scripts.
  - **mist** - Migrate status: Alias of *'drush migrate-status'*
