@@ -3,11 +3,11 @@ name: my-hugo-duncan-fansite
 # >>>=== TURBO-MODE ===>>>
 # Uncomment the yaml section below to enable the MACOS filesystem speedhack
 # which will improve the performance of your lando instance.
-# If you enable this, your drupal vendor directory will be synced to the container
+# If you enable this, your Drupal vendor directory will be synced to the container
 # on build and excluded from the volume. This means changes on the host will NOT
 # carry over to the container. If you run composer commands on the host YOU MUST
-# run the same command using 'lando composer' to apply those changes to container.
-# You may need to do a lando rebuild and or restart docker for this kick in.
+# run the same command using 'lando composer' to apply those to the container.
+# You may need to do a lando rebuild and/or restart docker for this kick in.
 #
 # excludes:
 #  - drupal8/vendor
