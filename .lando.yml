@@ -1,13 +1,14 @@
 recipe: drupal8
 config:
   webroot: drupal8/web
+  database: mariadb
   config:
     php: config/php.ini
     database: config/my.cnf
 compose:
   - docker-compose.yml
 env_file:
-  - config/drupal.env
+  - config/local.envvars
 services:
   appserver:
     xdebug: true
@@ -17,7 +18,7 @@ services:
     type: memcached
     portforward: true
   drupal7db:
-    type: mysql
+    type: mariadb
     portforward: true
     creds:
       user: drupal7
@@ -51,17 +52,17 @@ tooling:
                   lando nightwatch --skiptags core\n"
     cmd: "yarn --cwd=/app/drupal8/web/core test:nightwatch"
   phpunit:
-    description: "Run PHPUnit tests. You can specify also options, e.g. --testsuite=unit, or path to module(s) to test."
+    description: "Run PHPUnit tests. You can pass options, e.g. --group=nidirect, as you require"
     service: appserver
-    cmd: cd /app/drupal8/web/core && /app/drupal8/vendor/bin/phpunit -c phpunit.xml
+    cmd: cd /app/drupal8/web/core && /app/drupal8/vendor/bin/phpunit -c /app/drupal8/web/core/phpunit.xml
   phpcs:
     description: Run PHPCS checks against all custom Drupal 8 code (modules, migrations, themes) e.g. 'lando phpcs'
     service: appserver
-    cmd: /app/drupal8/phpcs.sh "/app/drupal8" "/app/drupal8/web/modules/custom /app/drupal8/web/modules/migrate /app/drupal8/web/themes/custom"
+    cmd: /app/drupal8/phpcs.sh "/app/drupal8" "/app/drupal8/web/modules/custom /app/drupal8/web/modules/migrate /app/drupal8/web/themes/custom /app/drupal8/web/profiles/custom"
   drck:
     description: Run drupal-check for Drupal 9 compatibility e.g. 'lando drck ./'
     service: appserver
-    cmd: drupal-check
+    cmd: /app/drupal8/vendor/bin/drupal-check
   drush:
     server: appserver
     cmd: drush -r /app/drupal8/web
