@@ -1,5 +1,11 @@
 # Copy this file to .lando.local.yml and edit the name value below.
 name: my-hugo-duncan-fansite
+# >>>=== XDEBUG ===>>>
+# Uncomment the config setting below and set the bool for enabling xdebug. Setting 
+# xdebug to false should improve the performance of your site at the cost of preventing
+# the use of the xdebug debugger.
+# config:
+#   xdebug: false
 # >>>=== TURBO-MODE ===>>>
 # Uncomment the yaml section below to enable the MACOS filesystem speedhack
 # which will improve the performance of your lando instance.
