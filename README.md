@@ -13,7 +13,8 @@ Now we can download Drupal 8 and import our Drupal 7 assets.
  4. Run *'lando start'*
  5. Run *'lando db-import -h drupal7db ./imports/data/[SQL DUMP FILENAME].sql'*
  6. Open your lando site url (displayed at the end of 'lando start', or use *'lando info'*)
- 7. Proceed with the Drupal 8 installation.  
+ 7. If using development branches you must cd into each dof-dss repo and do a *'git pull'* to fetch the latest commits.
+ 8. Proceed with the Drupal 8 installation.  
 
  ## Tips
  - Create a settings.local.php file to toggle development settings.
