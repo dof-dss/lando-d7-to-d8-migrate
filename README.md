@@ -9,17 +9,17 @@ Now we can download Drupal 8 and import our Drupal 7 assets.
 
  1. Copy your Drupal 7 database dump to ./imports/data and site files to ./imports/files (Note that you should copy the 'sites' directory into here, so that the path './imports/files/sites/default/files/articles' exists)
  2. Make a copy of .lando.example.yml naming it .lando.local.yml and edit with your own unique project name. 
- 3. Within .lando.local.yml consider enabling the TurboMode option, see the comments in that section.
- 4. Run *'lando start'*
- 5. Run *'lando db-import -h drupal7db ./imports/data/[SQL DUMP FILENAME].sql'*
- 6. Open your lando site url (displayed at the end of 'lando start', or use *'lando info'*)
- 7. If using development branches you must cd into each dof-dss repo and do a *'git pull'* to fetch the latest commits.
- 8. Proceed with the Drupal 8 installation.  
+ 3. Run *'lando start'*
+ 4. Run *'lando db-import -h drupal7db ./imports/data/[SQL DUMP FILENAME].sql'*
+ 5. Open your lando site url (displayed at the end of 'lando start', or use *'lando info'*)
+ 6. If using development branches you must cd into each dof-dss repo and do a *'git pull'* to fetch the latest commits.
+ 7. Proceed with the Drupal 8 installation.  
 
  ## Tips
  - Create a settings.local.php file to toggle development settings.
  - Copy the config_split config from settings.php to setting.local.php and reverse the boolean assignment.
  - Use the 'lando drush/drupal csex' command to import configuration splits.
+ - After installing the site, within .lando.local.yml, consider enabling the TurboMode option to improve performance. See the comments in lando.local.yml for more details.
 
 ## File structure
 
