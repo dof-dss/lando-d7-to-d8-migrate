@@ -43,6 +43,9 @@ cp -v $DRUPAL_ROOT/sites/default/default.settings.php $DRUPAL_SETTINGS_FILE
 echo "Append local environment settings to settings.php file"
 cat /app/config/drupal.settings >> $DRUPAL_SETTINGS_FILE
 
+echo "Creating settings.local file"
+cp -v $DRUPAL_ROOT/sites/example.settings.local.php $DRUPAL_ROOT/sites/default/settings.local.php
+
 # Copy default services config and replace key values for local development.
 cp /app/config/default.services.yml $DRUPAL_SERVICES_FILE
 sed -i -e "s|\(gc_maxlifetime\:\) \(200000\)|\1 86400|g" $DRUPAL_SERVICES_FILE
