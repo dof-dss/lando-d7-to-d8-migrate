@@ -46,6 +46,14 @@ cat /app/config/drupal.settings >> $DRUPAL_SETTINGS_FILE
 echo "Creating settings.local file"
 cp -v $DRUPAL_ROOT/sites/example.settings.local.php $DRUPAL_ROOT/sites/default/settings.local.php
 
+echo "Updating config sync to enable install profile"
+# Playing it safe here and matching only the exact strings vs matches against 'standard'.
+sed -i 's/standard: 1000/minimal: 1000/g' /app/drupal8/config/sync/core.extension.yml
+sed -i 's/profile: standard/profile: minimal/g' /app/drupal8/config/sync/core.extension.yml
+# Config split for local.
+sed -i 's/standard: 1000/minimal: 1000/g' /app/drupal8/config/local/core.extension.yml
+sed -i 's/profile: standard/profile: minimal/g' /app/drupal8/config/local/core.extension.yml
+
 # Copy default services config and replace key values for local development.
 cp /app/config/default.services.yml $DRUPAL_SERVICES_FILE
 sed -i -e "s|\(gc_maxlifetime\:\) \(200000\)|\1 86400|g" $DRUPAL_SERVICES_FILE
