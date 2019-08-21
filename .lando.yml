@@ -11,7 +11,7 @@ env_file:
   - config/local.envvars
 services:
   appserver:
-    xdebug: true
+    xdebug: false
     build_as_root:
       - /app/scripts/appserver_build.sh
   memcached:
