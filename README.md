@@ -16,10 +16,11 @@ Now we can download Drupal 8 and import our Drupal 7 assets.
  7. If using development branches you must cd into each dof-dss repo and do a *'git pull'* to fetch the latest commits.
  8. Proceed with the Drupal 8 installation.
  9. On the 'Select an installation profile', check 'Use existing configuration' and continue.
+ 10. Read the following tips to ensure you are using the right development and configuration settings.
 
  ## Tips
  - Edit settings.local.php file to toggle development settings.
- - Copy the config_split config from settings.php to setting.local.php and reverse the boolean assignment.
+ - Edit settings.php and uncomment the *'config split environment'* settings, checking the appropriate boolean assignment is set.
  - Use the 'lando drush/drupal csex' command to import configuration splits.
  - After installing the site, within .lando.local.yml, consider enabling the TurboMode option to improve performance. See the comments in lando.local.yml for more details.
 
