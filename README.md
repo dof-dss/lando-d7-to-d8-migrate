@@ -44,3 +44,27 @@ Run the following utils using: `lando [command]`
  - **miup** - Migrate upgrade: Exports Drupal 8 database to /exports/data and runs *'drush migrate-upgrade'*
  - **miip** - Migrate import: Alias of *'drush migrate-import'*
  - **mirs** - Migrate reset status: Alias of *'drush migrate-reset-status'*
+
+## Talisman pre-commit hooks
+
+We *strongly* recommend developers use Talisman when working on this project. 
+
+Talisman validates the outgoing changeset for things that look suspicious - such as authorization tokens and private keys.
+
+(Installation instructions)[https://github.com/thoughtworks/talisman/#installation-as-a-global-hook-template]
+
+### FAQ
+
+Q: Can this be installed and run as a Lando task?
+A: Unfortunately not, as that would require you to run git within the container which isn't ideal or convenient. It's super easy to install
+, only needs to be done once and Talisman auto-updates too.
+
+Q: It won't let me commit my composer.lock file because it contains suspicious base64 encoded strings. How do I work around that?
+A: Talisman is technology agnostic; you see the same issues with Go and node.js projects. You have two choices here:
+
+1. Carefully review the changes, then override the pre-commit hook: `git commit -m "Your message" -n`
+2. Carefully manage the ignore stanzas of `.talismanrc` files per repo, ensuring that the checksums are updated each time the corresponding files are changed.
+
+Option 2 is significantly more secure, but also significantly more inconvenient. Teams will need to decide and agree which approach to take on a case-by-case basis.
+
+https://github.com/thoughtworks/talisman/issues/122 shows efforts to introduce permanent ignore scope for specific files, which may offer a helpful middle ground.
