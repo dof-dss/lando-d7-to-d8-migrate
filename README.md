@@ -56,11 +56,11 @@ Talisman validates the outgoing changeset for things that look suspicious - such
 
 ### FAQ
 
-Q: Can this be installed and run as a Lando task?
+Q: Can this be installed and run as a Lando task?\
 A: Unfortunately not, as that would require you to run git within the container which isn't ideal or convenient. It's super easy to install
 , only needs to be done once and Talisman auto-updates too.
 
-Q: It won't let me commit my composer.lock file because it contains suspicious base64 encoded strings. How do I work around that?
+Q: It won't let me commit my composer.lock file because it contains suspicious base64 encoded strings. How do I work around that?\
 A: Talisman is technology agnostic; you see the same issues with Go and node.js projects. You have two choices here:
 
 1. Carefully review the changes, then override the pre-commit hook: `git commit -m "Your message" -n`
