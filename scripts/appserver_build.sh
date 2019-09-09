@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env bash
 
 # Variables to indicate key settings files or directories for Drupal.
 DRUPAL_REPO_URL=git@github.com:dof-dss/nidirect-drupal.git
@@ -9,6 +9,16 @@ DRUPAL_SERVICES_FILE=$DRUPAL_ROOT/sites/default/services.yml
 DRUPAL_CUSTOM_CODE=$DRUPAL_ROOT/modules/custom
 DRUPAL_MIGRATE_CODE=$DRUPAL_ROOT/modules/migrate/nidirect-migrations
 DRUPAL_TEST_PROFILE=$DRUPAL_ROOT/profiles/custom/test_profile
+
+# List of repos we want to check for dev branches + pull to update after provisioning.
+REPOS=(
+    modules/custom
+    modules/origins
+    modules/migrate/nidirect-migrations
+    themes/custom/nicsdru_origins_theme
+    themes/custom/nicsdru_nidirect_theme
+    profiles/custom/test_profile
+)
 
 # Semaphore files to control whether we need to trigger an install
 # of supporting software or config files.
@@ -29,6 +39,21 @@ if [ ! -d "/app/drupal8" ]; then
   composer -d/app/drupal8 drupal:scaffold
   composer -d/app/drupal8 run-script post-install-cmd
 fi
+
+# Scan through repos we know could be on non-tagged releases
+# and git pull to ensure latest code; something composer doesn't do for us.
+for repo in "${REPOS[@]}"
+do
+  cd $DRUPAL_ROOT/$repo
+
+  # Tags won't show any output, so git pull the ones that aren't tags.
+  if [[ $(git symbolic-ref --short HEAD) ]]; then
+    echo "Fetching latest contents of repository at ${DRUPAL_ROOT}/${repo}"
+    git pull
+  else
+    echo "Skipping refresh of ${DRUPAL_ROOT}/${repo} as checkout out on releas"
+  fi
+done
 
 # Create Drupal private file directory above web root.
 if [ ! -d "/app/drupal8/private" ]; then
