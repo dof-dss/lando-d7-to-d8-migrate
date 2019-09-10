@@ -51,7 +51,7 @@ do
     echo "Fetching latest contents of repository at ${DRUPAL_ROOT}/${repo}"
     git pull
   else
-    echo "Skipping refresh of ${DRUPAL_ROOT}/${repo} as checkout out on releas"
+    echo "Skipping ${DRUPAL_ROOT}/${repo} as it is presently checked out on release tag"
   fi
 done
 
