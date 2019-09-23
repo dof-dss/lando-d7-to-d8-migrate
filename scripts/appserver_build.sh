@@ -13,7 +13,6 @@ DRUPAL_TEST_PROFILE=$DRUPAL_ROOT/profiles/custom/test_profile
 # List of repos we want to check for dev branches + pull to update after provisioning.
 REPOS=(
     modules/custom
-    modules/origins
     modules/migrate/nidirect-migrations
     themes/custom/nicsdru_origins_theme
     themes/custom/nicsdru_nidirect_theme
