@@ -7,7 +7,9 @@ imports
 # Ignore IDE / dev tools config
 /nbproject/
 /.idea/
+.vscode/
 *.gz
 chrome_devtools
 *.bak
 vm
+.talismanrc

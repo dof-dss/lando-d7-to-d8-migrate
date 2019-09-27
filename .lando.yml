@@ -1,42 +1,74 @@
 recipe: drupal8
 config:
   webroot: drupal8/web
+  database: mariadb
   config:
     php: config/php.ini
     database: config/my.cnf
 compose:
   - docker-compose.yml
+env_file:
+  - config/local.envvars
 services:
   appserver:
-    xdebug: true
+    xdebug: false
     build_as_root:
       - /app/scripts/appserver_build.sh
   memcached:
     type: memcached
     portforward: true
   drupal7db:
-    type: mysql
+    type: mariadb
     portforward: true
     creds:
       user: drupal7
       password: drupal7
       database: drupal7
+  solr:
+    type: solr:7
+    portforward: true
+    core: default
+    config:
+      dir: config/solr/7.x/default
+  solr-healthconditions:
+    type: solr:7
+    portforward: true
+    core: healthconditions
+    config:
+      dir: config/solr/7.x/healthconditions
 tooling:
+  xdebug-on:
+    service: appserver
+    description: Enable xdebug
+    cmd: "docker-php-ext-enable xdebug && /etc/init.d/apache2 reload"
+    user: root
+  xdebug-off:
+    service: appserver
+    description: Disable xdebug
+    cmd: "rm /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini && /etc/init.d/apache2 reload"
+    user: root
   yarn:
     service: appserver
     cmd: yarn
   nightwatch:
     service: appserver
-    description: "Run Nightwatch.js functional tests"
-    cmd: "cd /app/drupal8/web/core && yarn test:nightwatch"
+    description: "Run Nightwatch.js functional tests.\n\n
+                  Usage:\n
+                  > Run a specific test with tag\n
+                  lando nightwatch --tag your-tag\n
+                  > Run a single test suite file, relative to Drupal core location\n
+                  lando nightwatch ../modules/custom/modulename/tests/src/Nightwatch/Tests/yourTestSuite.js\n
+                  > Run all tests except Core\n
+                  lando nightwatch --skiptags core\n"
+    cmd: "yarn --cwd=/app/drupal8/web/core test:nightwatch"
   phpunit:
-    description: "Run PHPUnit tests. You can specify also options, e.g. --testsuite=unit, or path to module(s) to test."
+    description: "Run PHPUnit tests. You can pass options, e.g. --group=nidirect, as you require"
     service: appserver
-    cmd: cd /app/drupal8/web/core && /app/drupal8/vendor/bin/phpunit -c phpunit.xml
+    cmd: cd /app/drupal8/web/core && /app/drupal8/vendor/bin/phpunit -c /app/drupal8/web/core/phpunit.xml
   phpcs:
     description: Run PHPCS checks against all custom Drupal 8 code (modules, migrations, themes) e.g. 'lando phpcs'
     service: appserver
-    cmd: /app/drupal8/phpcs.sh "/app/drupal8" "/app/drupal8/web/modules/custom /app/drupal8/web/modules/migrate /app/drupal8/web/themes/custom/nidirect"
+    cmd: /app/drupal8/phpcs.sh "/app/drupal8" "/app/drupal8/web/modules/origins /app/drupal8/web/modules/custom /app/drupal8/web/modules/migrate /app/drupal8/web/themes/custom /app/drupal8/web/profiles/custom"
   drck:
     description: Run drupal-check for Drupal 9 compatibility e.g. 'lando drck ./'
     service: appserver
@@ -44,11 +76,6 @@ tooling:
   drush:
     server: appserver
     cmd: drush -r /app/drupal8/web
-  mi-init:
-    description: Initialise some default migration setup.
-    service: appserver
-    cmd: /app/scripts/mi-init.sh
-    user: root
   mist:
     description: View migration status
     cmd:
@@ -63,6 +90,10 @@ tooling:
     description: Perform a migrate-import
     cmd:
       - appserver: drush -r /app/drupal8/web migrate-import
+  mirb:
+    description: Perform a migrate-rollback
+    cmd:
+      - appserver: drupal --root=/app/drupal8/web migrate:rollback --source-base_path=/app/drupal8/web
   mirs:
     description: Perform a migrate-reset-status
     cmd:
