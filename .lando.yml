@@ -30,12 +30,6 @@ services:
     core: default
     config:
       dir: config/solr/7.x/default
-  solr-healthconditions:
-    type: solr:7
-    portforward: true
-    core: healthconditions
-    config:
-      dir: config/solr/7.x/healthconditions
 tooling:
   xdebug-on:
     service: appserver
