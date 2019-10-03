@@ -11,4 +11,3 @@ solr.autoCommit.MaxTime=15000
 solr.autoSoftCommit.MaxDocs=-1
 solr.autoSoftCommit.MaxTime=-1
 solr.install.dir=../../..
-solr.install.dir=/opt/solr
