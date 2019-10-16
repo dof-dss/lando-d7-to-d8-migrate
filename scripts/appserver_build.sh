@@ -74,9 +74,6 @@ echo "Updating config sync to enable install profile"
 # Playing it safe here and matching only the exact strings vs matches against 'standard'.
 sed -i 's/standard: 1000/minimal: 1000/g' /app/drupal8/config/sync/core.extension.yml
 sed -i 's/profile: standard/profile: minimal/g' /app/drupal8/config/sync/core.extension.yml
-# Config split for local.
-sed -i 's/standard: 1000/minimal: 1000/g' /app/drupal8/config/local/core.extension.yml
-sed -i 's/profile: standard/profile: minimal/g' /app/drupal8/config/local/core.extension.yml
 
 # Copy default services config and replace key values for local development.
 cp /app/config/default.services.yml $DRUPAL_SERVICES_FILE
