@@ -79,7 +79,7 @@ sed -i 's/profile: standard/profile: minimal/g' /app/drupal8/config/sync/core.ex
 cp /app/config/default.services.yml $DRUPAL_SERVICES_FILE
 sed -i -e "s|\(gc_maxlifetime\:\) \(200000\)|\1 86400|g" $DRUPAL_SERVICES_FILE
 sed -i -e "s|\(cookie_lifetime\:\) \(2000000\)|\1 86400|g" $DRUPAL_SERVICES_FILE
-sed -i -e "s|\(http.response.debug_cacheability_headers\: \)|\1 false|g" $DRUPAL_SERVICES_FILE
+sed -i -e "s|\(http.response.debug_cacheability_headers\:\) false|\1 true|g" $DRUPAL_SERVICES_FILE
 
 chmod -w $DRUPAL_ROOT/sites/default
 
