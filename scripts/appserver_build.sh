@@ -80,6 +80,13 @@ cp /app/config/default.services.yml $DRUPAL_SERVICES_FILE
 sed -i -e "s|\(gc_maxlifetime\:\) \(200000\)|\1 86400|g" $DRUPAL_SERVICES_FILE
 sed -i -e "s|\(cookie_lifetime\:\) \(2000000\)|\1 86400|g" $DRUPAL_SERVICES_FILE
 sed -i -e "s|\(http.response.debug_cacheability_headers\:\) false|\1 true|g" $DRUPAL_SERVICES_FILE
+# Glue on some development services.
+cat << EOF >> $DRUPAL_SERVICES_FILE
+services:
+  cache.backend.null:
+    class: Drupal\Core\Cache\NullBackendFactory
+EOF
+
 
 chmod -w $DRUPAL_ROOT/sites/default
 
