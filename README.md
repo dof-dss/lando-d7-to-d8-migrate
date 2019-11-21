@@ -18,6 +18,7 @@ Now we can download Drupal 8 and import our Drupal 7 assets.
  9. Read the following tips to ensure you are using the right development and configuration settings.
 
  ## Tips
+ - If configuration import is taking a long time (> 60 mins) stop the install, clean the database and reboot your machine. 
  - Edit settings.local.php file to toggle development settings.
  - Edit settings.php and uncomment the *'config split environment'* settings, checking the appropriate boolean assignment is set.
  - Use the 'lando drush/drupal csex' command to import configuration splits.
