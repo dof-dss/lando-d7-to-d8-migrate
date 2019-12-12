@@ -26,7 +26,7 @@ $databases['drupal7db']['default'] = array (
 $databases['migrate']['default'] = $databases['drupal7db']['default'];
 
 // Custom configuration sync directory under web root.
-$config_directories[CONFIG_SYNC_DIRECTORY] = getenv('CONFIG_SYNC_DIRECTORY');
+$settings['config_sync_directory'] = getenv('CONFIG_SYNC_DIRECTORY');
 
 // Memcache - uncomment when required.
 // $settings['cache']['default'] = 'cache.backend.memcache';
