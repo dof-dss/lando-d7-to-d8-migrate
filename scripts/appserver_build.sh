@@ -52,6 +52,13 @@ do
   fi
 done
 
+# Create Drupal public files directory and set IO permissions.
+if [ ! -d "/app/drupal8/web/sites/default/files" ]; then
+  echo "Creating public Drupal files directory"
+  mkdir -p /app/drupal8/web/sites/default/files
+  chmod -R 0777 /app/drupal8/web/sites/default/files
+fi
+
 # Create Drupal private file directory above web root.
 if [ ! -d "/app/drupal8/private" ]; then
   echo "Creating private Drupal files directory"
