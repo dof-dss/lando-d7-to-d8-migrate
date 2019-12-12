@@ -33,10 +33,8 @@ fi
 if [ ! -d "/app/drupal8" ]; then
   echo "Downloading Drupal"
   git clone $DRUPAL_REPO_URL /app/drupal8/
+  echo "Installing Drupal"
   composer -d/app/drupal8 install
-  echo "Building Drupal files"
-  composer -d/app/drupal8 drupal:scaffold
-  composer -d/app/drupal8 run-script post-install-cmd
 fi
 
 # Scan through repos we know could be on non-tagged releases
