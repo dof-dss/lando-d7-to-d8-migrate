@@ -17,6 +17,8 @@ services:
   memcached:
     type: memcached
     portforward: true
+    run:
+      - /bin/sh -c '/opt/bitnami/memcached/bin/memcached start -d'
   drupal7db:
     type: mariadb
     portforward: true
