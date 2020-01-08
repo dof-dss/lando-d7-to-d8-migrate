@@ -2,6 +2,7 @@ recipe: drupal8
 config:
   webroot: drupal8/web
   database: mariadb
+  php: '7.3'
   config:
     php: config/php.ini
     database: config/my.cnf
