@@ -100,3 +100,7 @@ tooling:
     description: Perform a migrate-reset-status
     cmd:
       - appserver: drush -r /app/drupal8/web migrate-reset-status
+  imp:
+    description: Import Configuration and Structure
+    cmd:
+      - appserver: drush -r /app/drupal8/web cim -y && drush -r /app/drupal8/web ib --choice=full
