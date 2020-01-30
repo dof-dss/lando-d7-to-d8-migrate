@@ -10,15 +10,6 @@ DRUPAL_CUSTOM_CODE=$DRUPAL_ROOT/modules/custom
 DRUPAL_MIGRATE_CODE=$DRUPAL_ROOT/modules/migrate/nidirect-migrations
 DRUPAL_TEST_PROFILE=$DRUPAL_ROOT/profiles/custom/test_profile
 
-# List of repos we want to check for dev branches + pull to update after provisioning.
-REPOS=(
-    modules/custom
-    modules/migrate/nidirect-migrations
-    themes/custom/nicsdru_origins_theme
-    themes/custom/nicsdru_nidirect_theme
-    profiles/custom/test_profile
-)
-
 # Semaphore files to control whether we need to trigger an install
 # of supporting software or config files.
 NODE_YARN_INSTALLED=/etc/NODE_YARN_INSTALLED
@@ -39,21 +30,6 @@ if [ ! -d "/app/drupal8" ]; then
   echo "Installing Drupal"
   composer -d/app/drupal8 install
 fi
-
-# Scan through repos we know could be on non-tagged releases
-# and git pull to ensure latest code; something composer doesn't do for us.
-for repo in "${REPOS[@]}"
-do
-  cd $DRUPAL_ROOT/$repo
-
-  # Tags won't show any output, so git pull the ones that aren't tags.
-  if [[ $(git symbolic-ref --short HEAD) ]]; then
-    echo "Fetching latest contents of repository at ${DRUPAL_ROOT}/${repo}"
-    git pull
-  else
-    echo "Skipping ${DRUPAL_ROOT}/${repo} as it is presently checked out on release tag"
-  fi
-done
 
 # Create Drupal public files directory and set IO permissions.
 if [ ! -d "/app/drupal8/web/sites/default/files" ]; then
