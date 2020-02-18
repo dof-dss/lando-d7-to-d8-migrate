@@ -103,4 +103,4 @@ tooling:
   imp:
     description: Import Configuration and Structure
     cmd:
-      - appserver: drush -r /app/drupal8/web cim -y && drush -r /app/drupal8/web ib --choice=full
+      - appserver: drush -r /app/drupal8/web cr -y && drush -r /app/drupal8/web cim -y && drush -r /app/drupal8/web ib --choice=full
