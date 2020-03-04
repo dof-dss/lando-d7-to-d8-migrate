@@ -15,11 +15,11 @@ services:
     xdebug: false
     build_as_root:
       - /app/scripts/appserver_build.sh
-  memcached:
-    type: memcached
-    portforward: true
-    run:
-      - /bin/sh -c '/opt/bitnami/memcached/bin/memcached start -d'
+  redis:
+    type: redis:5.0
+    persist: true
+    config:
+        server: config/redis.conf
   drupal7db:
     type: mariadb
     portforward: true

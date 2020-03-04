@@ -28,9 +28,12 @@ $databases['migrate']['default'] = $databases['drupal7db']['default'];
 // Custom configuration sync directory under web root.
 $settings['config_sync_directory'] = getenv('CONFIG_SYNC_DIRECTORY');
 
-// Memcache - uncomment when required.
-// $settings['cache']['default'] = 'cache.backend.memcache';
-$settings['memcache']['servers'] = [sprintf('%s:%s', getenv('MEMCACHE_HOSTNAME'), getenv('MEMCACHE_PORT')) => 'default'];
+// Redis cache settings
+$settings['redis.connection']['interface'] = 'PhpRedis';
+$settings['redis.connection']['host'] = getenv('REDIS_HOSTNAME');
+$settings['redis.connection']['port'] = getenv('REDIS_PORT');
+$settings['cache']['default'] = 'cache.backend.redis';
+$settings['container_yamls'][] = $app_root . '/' . $site_path . '/redis.services.yml';
 
 // Set config split environment.
 $config['config_split.config_split.local']['status'] = TRUE;
