@@ -18,6 +18,8 @@ services:
   redis:
     type: redis:5.0
     persist: true
+    config:
+        server: config/redis.conf
   drupal7db:
     type: mariadb
     portforward: true
