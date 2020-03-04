@@ -32,7 +32,7 @@ $settings['config_sync_directory'] = getenv('CONFIG_SYNC_DIRECTORY');
 // Workaround for https://www.drupal.org/project/redis/issues/2876132
 // Only enable the redis cache backend if we know the site has been
 // installed and the Redis module is enabled.
-if (!\Drupal\Core\Installer\InstallerKernel::installationAttempted() && $moduleHandler->moduleExists('redis')){
+if (!\Drupal\Core\Installer\InstallerKernel::installationAttempted() && extension_loaded('redis')){
   $settings['redis.connection']['interface'] = 'PhpRedis';
   $settings['redis.connection']['host'] = getenv('REDIS_HOSTNAME');
   $settings['redis.connection']['port'] = getenv('REDIS_PORT');
