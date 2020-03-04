@@ -71,6 +71,9 @@ services:
     class: Drupal\Core\Cache\NullBackendFactory
 EOF
 
+echo "Copying Redis service overrides"
+cp -v /app/config/redis.services.yml $DRUPAL_ROOT/sites/default/redis.services.yml
+
 
 chmod -w $DRUPAL_ROOT/sites/default
 
