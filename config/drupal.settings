@@ -33,16 +33,16 @@ $settings['config_sync_directory'] = getenv('CONFIG_SYNC_DIRECTORY');
 // Only enable the redis cache backend if we know the site has been
 // installed and the Redis module is enabled.
 // See: https://github.com/platformsh-templates/drupal8/blob/master/web/sites/default/settings.platformsh.php
-if (!\Drupal\Core\Installer\InstallerKernel::installationAttempted() && extension_loaded('redis')){
+if (!\Drupal\Core\Installer\InstallerKernel::installationAttempted() && extension_loaded('redis') && class_exists('Drupal\redis\ClientFactory')){
   $settings['redis.connection']['interface'] = 'PhpRedis';
   $settings['redis.connection']['host'] = getenv('REDIS_HOSTNAME');
   $settings['redis.connection']['port'] = getenv('REDIS_PORT');
   $settings['cache']['default'] = 'cache.backend.redis';
-  $settings['container_yamls'][] = $app_root . '/' . $site_path . '/redis.services.yml';
+  $settings['container_yamls'][] = $app_root . '/' . $site_path . '/default/redis.services.yml';
 
   // Manually add the classloader path, this is required for the container cache bin definition below
   // and allows to use it without the redis module being enabled.
-  $class_loader->addPsr4('Drupal\\redis\\', 'modules/contrib/redis/src');
+  $class_loader->addPsr4('Drupal\\redis\\', $app_root . '/' . $site_path . '/modules/contrib/redis/src');
 
   // Use redis for container cache.
   // The container cache is used to load the container definition itself, and
