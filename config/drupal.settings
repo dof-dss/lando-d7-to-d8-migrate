@@ -38,7 +38,7 @@ $redis_enabled = false;
 //    $settings['redis.connection']['host'] = getenv('REDIS_HOSTNAME');
 //    $settings['redis.connection']['port'] = getenv('REDIS_PORT');
 //    $settings['cache']['default'] = 'cache.backend.redis';
-//    $settings['container_yamls'][] = $app_root . '/' . $site_path . '/default/redis.services.yml';
+//    $settings['container_yamls'][] = $app_root . '/' . $site_path . '/redis.services.yml';
 //
 //    // Manually add the classloader path, this is required for the container cache bin definition below
 //    // and allows to use it without the redis module being enabled.
