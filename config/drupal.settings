@@ -28,8 +28,12 @@ $databases['migrate']['default'] = $databases['drupal7db']['default'];
 // Custom configuration sync directory under web root.
 $settings['config_sync_directory'] = getenv('CONFIG_SYNC_DIRECTORY');
 
+// Redis Cache.
+// Due to issues with enabling Redis during install/config import. We cannot enable the cache backend by default.
+// Once you have a site/db installed. Enable the Redis module and change the $redis_enabled to true.
+$redis_enabled = false;
 // COMMENTED OUT UNTIL REDIS ISSUES ARE ADDRESSED.
-//if (!\Drupal\Core\Installer\InstallerKernel::installationAttempted() && extension_loaded('redis') && class_exists('Drupal\redis\ClientFactory')){
+//if ($redis_enabled && !\Drupal\Core\Installer\InstallerKernel::installationAttempted() && extension_loaded('redis') && class_exists('Drupal\redis\ClientFactory')){
 //    $settings['redis.connection']['interface'] = 'PhpRedis';
 //    $settings['redis.connection']['host'] = getenv('REDIS_HOSTNAME');
 //    $settings['redis.connection']['port'] = getenv('REDIS_PORT');
