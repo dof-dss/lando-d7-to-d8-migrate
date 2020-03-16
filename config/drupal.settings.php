@@ -1,3 +1,6 @@
+<?php
+
+// @codingStandardsIgnoreFile
 $settings['file_private_path'] = getenv('FILE_PRIVATE_PATH');
 
 $databases['default']['default'] = [
@@ -21,12 +24,6 @@ $databases['drupal7db']['default'] = array (
   'namespace' => getenv('MIGRATE_SOURCE_DB_NAMESPACE'),
   'driver' => getenv('MIGRATE_SOURCE_DB_DRIVER'),
 );
-
-// Prevent SqlBase from moaning.
-$databases['migrate']['default'] = $databases['drupal7db']['default'];
-
-// Custom configuration sync directory under web root.
-$settings['config_sync_directory'] = getenv('CONFIG_SYNC_DIRECTORY');
 
 // Redis Cache.
 // Due to issues with enabling Redis during install/config import. We cannot enable the cache backend by default.
@@ -75,8 +72,15 @@ $redis_enabled = false;
 //    ];
 //}
 
+// Prevent SqlBase from moaning.
+$databases['migrate']['default'] = $databases['drupal7db']['default'];
+
+// Custom configuration sync directory under web root.
+$settings['config_sync_directory'] = getenv('CONFIG_SYNC_DIRECTORY');
+
 // Set config split environment.
 $config['config_split.config_split.local']['status'] = TRUE;
+$config['config_split.config_split.development']['status'] = FALSE;
 $config['config_split.config_split.production']['status'] = FALSE;
 
 // Site hash salt.
@@ -100,8 +104,3 @@ $settings['simple_environment_indicator'] = sprintf('%s %s', getenv('SIMPLEI_ENV
 
 // Geocoder API key.
 $config['geolocation.settings']['google_map_api_key'] = getenv('GOOGLE_MAP_API_KEY');
-
-// Add local settings include if present.
-if (file_exists($app_root . '/' . $site_path . '/settings.local.php')) {
-   include $app_root . '/' . $site_path . '/settings.local.php';
-}

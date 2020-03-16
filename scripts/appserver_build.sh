@@ -44,15 +44,11 @@ if [ ! -d "/app/drupal8/private" ]; then
   mkdir -p /app/drupal8/private
 fi
 
-# Set local environment settings at end of settings.php file.
-chmod -R +rw $DRUPAL_ROOT/sites/default
-cp -v $DRUPAL_ROOT/sites/default/default.settings.php $DRUPAL_SETTINGS_FILE
+# Set local environment settings.php file.
+echo "Creating settings.local.php file using our Lando copy"
+chmod +w $DRUPAL_ROOT/sites/default
 
-echo "Append local environment settings to settings.php file"
-cat /app/config/drupal.settings >> $DRUPAL_SETTINGS_FILE
-
-echo "Creating settings.local file"
-cp -v $DRUPAL_ROOT/sites/example.settings.local.php $DRUPAL_ROOT/sites/default/settings.local.php
+cp -v /app/config/drupal.settings.php $DRUPAL_ROOT/sites/default/settings.local.php
 
 echo "Updating config sync to enable install profile"
 # Playing it safe here and matching only the exact strings vs matches against 'standard'.
@@ -60,21 +56,12 @@ sed -i 's/standard: 1000/minimal: 1000/g' /app/drupal8/config/sync/core.extensio
 sed -i 's/profile: standard/profile: minimal/g' /app/drupal8/config/sync/core.extension.yml
 
 # Copy default services config and replace key values for local development.
-cp /app/config/default.services.yml $DRUPAL_SERVICES_FILE
-sed -i -e "s|\(gc_maxlifetime\:\) \(200000\)|\1 86400|g" $DRUPAL_SERVICES_FILE
-sed -i -e "s|\(cookie_lifetime\:\) \(2000000\)|\1 86400|g" $DRUPAL_SERVICES_FILE
-sed -i -e "s|\(http.response.debug_cacheability_headers\:\) false|\1 true|g" $DRUPAL_SERVICES_FILE
-# Glue on some development services.
-cat << EOF >> $DRUPAL_SERVICES_FILE
-services:
-  cache.backend.null:
-    class: Drupal\Core\Cache\NullBackendFactory
-EOF
+cp -v /app/config/drupal.services.yml $DRUPAL_SERVICES_FILE
 
 echo "Copying Redis service overrides"
 cp -v /app/config/redis.services.yml $DRUPAL_ROOT/sites/default/redis.services.yml
 
-
+# Close off write access to the folder.
 chmod -w $DRUPAL_ROOT/sites/default
 
 # Set Simple test variables and put PHPUnit config in place.
