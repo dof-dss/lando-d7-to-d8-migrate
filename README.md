@@ -1,4 +1,6 @@
-## NOTE
+## IMPORTANT
+
+To enable Redis cache you will first need a completed install of the site. Enable the Redis module and update /sites/default/settings.php file to set $redis_enabled to true.
 
 The recent update to Drupal Core composer scaffolding scripts can cause a Runtime Exception that the default.services.yml could not be deleted. To fix this in Lando:
 
