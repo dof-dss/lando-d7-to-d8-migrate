@@ -85,14 +85,6 @@ $config['config_split.config_split.production']['status'] = FALSE;
 // Site hash salt.
 $settings['hash_salt'] = getenv('HASH_SALT');
 
-// Config readonly settings.
-$settings['config_readonly'] = getenv('CONFIG_READONLY');
-
-if (PHP_SAPI === 'cli') {
-  // Override for drupal console/drush client.
-  $settings['config_readonly'] = FALSE;
-}
-
 // Configuration that is allowed to be changed in readonly environments.
 $settings['config_readonly_whitelist_patterns'] = [
   'system.site',
