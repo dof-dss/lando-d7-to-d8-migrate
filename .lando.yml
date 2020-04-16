@@ -2,6 +2,7 @@ recipe: drupal8
 config:
   webroot: drupal8/web
   database: mariadb
+  php: '7.3'
   config:
     php: config/php.ini
     database: config/my.cnf
@@ -14,9 +15,11 @@ services:
     xdebug: false
     build_as_root:
       - /app/scripts/appserver_build.sh
-  memcached:
-    type: memcached
-    portforward: true
+  redis:
+    type: redis:5.0
+    persist: true
+    config:
+        server: config/redis.conf
   drupal7db:
     type: mariadb
     portforward: true
@@ -30,12 +33,11 @@ services:
     core: default
     config:
       dir: config/solr/7.x/default
-  solr-healthconditions:
-    type: solr:7
+  mailhog:
+    type: mailhog
     portforward: true
-    core: healthconditions
-    config:
-      dir: config/solr/7.x/healthconditions
+    hogfrom:
+      - appserver
 tooling:
   xdebug-on:
     service: appserver
@@ -93,8 +95,12 @@ tooling:
   mirb:
     description: Perform a migrate-rollback
     cmd:
-      - appserver: drupal --root=/app/drupal8/web migrate:rollback --source-base_path=/app/drupal8/web
+      - appserver: drush -r /app/drupal8/web migrate:rollback
   mirs:
     description: Perform a migrate-reset-status
     cmd:
       - appserver: drush -r /app/drupal8/web migrate-reset-status
+  imp:
+    description: Import Configuration and Structure
+    cmd:
+      - appserver: drush -r /app/drupal8/web cr -y && drush -r /app/drupal8/web cim -y && drush -r /app/drupal8/web ib --choice=full

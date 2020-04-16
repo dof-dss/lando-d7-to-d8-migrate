@@ -1,3 +1,13 @@
+## IMPORTANT
+
+To enable Redis cache you will first need a completed install of the site. Enable the Redis module and update /sites/default/settings.php file to set $redis_enabled to true.
+
+The recent update to Drupal Core composer scaffolding scripts can cause a Runtime Exception that the default.services.yml could not be deleted. To fix this in Lando:
+
+1. cd /mysite/drupal8/web/sites
+2. chmod u+w default
+ 
+
 ## Getting started
 Ensure you have the following installed:
 
@@ -9,7 +19,7 @@ Now we can download Drupal 8 and import our Drupal 7 assets.
 
  1. Copy your Drupal 7 database dump to ./imports/data and site files to ./imports/files (Note that you should copy the 'sites' directory into here, so that the path './imports/files/sites/default/files/articles' exists)
  2. Make a copy of .lando.example.yml naming it .lando.local.yml and edit with your own unique project name.
- 3. Update local.envvars with any local changes you require.
+ 3. Update config/local.envvars with any local changes you require.
  4. Run *'lando start'*
  5. Run *'lando db-import -h drupal7db ./imports/data/[SQL DUMP FILENAME].sql'*
  6. Open your lando site url (displayed at the end of 'lando start', or use *'lando info'*)
@@ -18,6 +28,7 @@ Now we can download Drupal 8 and import our Drupal 7 assets.
  9. Read the following tips to ensure you are using the right development and configuration settings.
 
  ## Tips
+ - If configuration import is taking a long time (> 60 mins) stop the install, clean the database and reboot your machine. 
  - Edit settings.local.php file to toggle development settings.
  - Edit settings.php and uncomment the *'config split environment'* settings, checking the appropriate boolean assignment is set.
  - Use the 'lando drush/drupal csex' command to import configuration splits.
