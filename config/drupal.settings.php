@@ -96,3 +96,8 @@ $settings['simple_environment_indicator'] = sprintf('%s %s', getenv('SIMPLEI_ENV
 
 // Geocoder API key.
 $config['geolocation.settings']['google_map_api_key'] = getenv('GOOGLE_MAP_API_KEY');
+
+// Google Analytics API config.
+$config['google_analytics_counter.settings']['general_settings']['client_id'] = getenv('GA_CLIENT_ID');
+$config['google_analytics_counter.settings']['general_settings']['client_secret'] = getenv('GA_CLIENT_SECRET');
+$config['google_analytics_counter.settings']['general_settings']['redirect_uri'] = getenv('GA_REDIRECT_URI');
