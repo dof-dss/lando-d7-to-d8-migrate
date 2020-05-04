@@ -1,6 +1,7 @@
 <?php
 
 // @codingStandardsIgnoreFile
+$settings['container_yamls'][] = $app_root . '/' . $site_path . '/services.development.yml';
 $settings['file_private_path'] = getenv('FILE_PRIVATE_PATH');
 
 $databases['default']['default'] = [
@@ -28,7 +29,7 @@ $databases['drupal7db']['default'] = array (
 // Redis Cache.
 // Due to issues with enabling Redis during install/config import. We cannot enable the cache backend by default.
 // Once you have a site/db installed. Enable the Redis module and change the $redis_enabled to true.
-$redis_enabled = false;
+$redis_enabled = FALSE;
 if ($redis_enabled && !\Drupal\Core\Installer\InstallerKernel::installationAttempted() && extension_loaded('redis') && class_exists('Drupal\redis\ClientFactory')){
     $settings['redis.connection']['interface'] = 'PhpRedis';
     $settings['redis.connection']['host'] = getenv('REDIS_HOSTNAME');
