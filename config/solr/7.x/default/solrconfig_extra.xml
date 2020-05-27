@@ -1,34 +1,34 @@
 <searchComponent name="spellcheck" class="solr.SpellCheckComponent">
-    <lst name="spellchecker">
-      <str name="name">en</str>
-      <str name="field">spellcheck_en</str>
-      <str name="classname">solr.DirectSolrSpellChecker</str>
-      <str name="distanceMeasure">internal</str>
-      <str name="accuracy">0.5</str>
-      <str name="maxEdits">2</str>
-      <str name="minPrefix">1</str>
-      <str name="maxInspections">5</str>
-      <str name="minQueryLength">4</str>
-      <str name="maxQueryFrequency">0.01</str>
-      <str name="thresholdTokenFrequency">.01</str>
-      <str name="onlyMorePopular">true</str>
-    </lst>
-  
+    <str name="queryAnalyzerFieldType">text_spell_und</str>
+
+<!-- Ref: https://lucene.apache.org/solr/guide/7_7/spell-checking.html -->
     <lst name="spellchecker">
       <str name="name">und</str>
       <str name="field">spellcheck_und</str>
       <str name="classname">solr.DirectSolrSpellChecker</str>
       <str name="distanceMeasure">internal</str>
-      <str name="accuracy">0.5</str>
+      <str name="accuracy">0.1</str>
       <str name="maxEdits">2</str>
-      <str name="minPrefix">1</str>
+      <str name="minPrefix">0</str>
       <str name="maxInspections">5</str>
-      <str name="minQueryLength">4</str>
+      <str name="minQueryLength">2</str>
       <str name="maxQueryFrequency">0.01</str>
-      <str name="thresholdTokenFrequency">.01</str>
+<!--Changed from default of .01-->
+      <str name="thresholdTokenFrequency">1</str>
       <str name="onlyMorePopular">true</str>
     </lst>
-  </searchComponent>
+
+    <lst name="spellchecker">
+      <str name="name">wordbreak</str>
+      <str name="classname">solr.WordBreakSolrSpellChecker</str>
+      <str name="field">spellcheck_und</str>
+      <str name="combineWords">true</str>
+      <str name="breakWords">true</str>
+      <int name="maxChanges">10</int>
+    </lst>
+
+</searchComponent>
+
 <searchComponent name="suggest" class="solr.SuggestComponent">
     <lst name="suggester">
       <str name="name">en</str>
@@ -141,7 +141,12 @@
 <requestHandler name="/spell" class="solr.SearchHandler" startup="lazy">
   <lst name="defaults">
     <str name="df">id</str>
+    <!-- Solr will use suggestions from both the 'default' spellchecker
+           and from the 'wordbreak' spellchecker and combine them.
+           collations (re-written queries) can include a combination of
+           corrections from both spellcheckers -->
     <str name="spellcheck.dictionary">und</str>
+    <str name="spellcheck.dictionary">wordbreak</str>
     <str name="spellcheck">on</str>
     <str name="spellcheck.onlyMorePopular">false</str>
     <str name="spellcheck.extendedResults">false</str>
