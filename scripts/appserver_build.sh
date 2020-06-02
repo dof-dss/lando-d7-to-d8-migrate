@@ -13,6 +13,7 @@ DRUPAL_TEST_PROFILE=$DRUPAL_ROOT/profiles/custom/test_profile
 # Semaphore files to control whether we need to trigger an install
 # of supporting software or config files.
 NODE_YARN_INSTALLED=/etc/NODE_YARN_INSTALLED
+CKEDITOR_PATCHED=/etc/CKEDITOR_PATCHED
 
 # Add hirak/prestissimo to speed up composer downloads.
 composer global require hirak/prestissimo --no-interaction
@@ -120,6 +121,17 @@ if [ ! -f "$NODE_YARN_INSTALLED" ]; then
 
   touch $NODE_YARN_INSTALLED
 
+fi
+
+if [ ! -f "$CKEDITOR_PATCHED" ]; then
+  # Replace vanilla CKEditor config with a custom one to fix the click/drag bug with embedded entities.
+  echo "Replace vanilla CKEditor config with a custom one to fix the click/drag bug with embedded entities"
+  git clone git@github.com:dof-dss/ckeditor4-fix-widget-dnd.git /tmp/ckeditor4-fix-widget-dnd
+  rm -rf $DRUPAL_ROOT/core/assets/vendor/ckeditor
+  mv -v /tmp/ckeditor4-fix-widget-dnd/build/ckeditor $DRUPAL_ROOT/core/assets/vendor/ckeditor
+  rm -rf /tmp/ckeditor4-fix-widget-dnd
+
+  touch $CKEDITOR_PATCHED
 fi
 
 # Add talismanrc to all known repos in this project, so we don't accidentally commit anything sensitive.
