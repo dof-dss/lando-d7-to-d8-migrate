@@ -126,7 +126,7 @@ fi
 if [ ! -f "$CKEDITOR_PATCHED" ]; then
   # Replace vanilla CKEditor config with a custom one to fix the click/drag bug with embedded entities.
   echo "Replace vanilla CKEditor config with a custom one to fix the click/drag bug with embedded entities"
-  git clone git@github.com:dof-dss/ckeditor4-fix-widget-dnd.git /tmp/ckeditor4-fix-widget-dnd
+  git clone https://github.com/dof-dss/ckeditor4-fix-widget-dnd.git /tmp/ckeditor4-fix-widget-dnd
   rm -rf $DRUPAL_ROOT/core/assets/vendor/ckeditor
   mv -v /tmp/ckeditor4-fix-widget-dnd/build/ckeditor $DRUPAL_ROOT/core/assets/vendor/ckeditor
   rm -rf /tmp/ckeditor4-fix-widget-dnd
