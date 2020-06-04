@@ -14,6 +14,10 @@ DRUPAL_TEST_PROFILE=$DRUPAL_ROOT/profiles/custom/test_profile
 # of supporting software or config files.
 NODE_YARN_INSTALLED=/etc/NODE_YARN_INSTALLED
 
+# Update APT cache and install Vim.
+  apt update
+  apt install -y vim
+
 # Add hirak/prestissimo to speed up composer downloads.
 composer global require hirak/prestissimo --no-interaction
 
@@ -81,12 +85,10 @@ fi
 # Add yarn/nodejs packages to allow functional testing on this service.
 if [ ! -f "$NODE_YARN_INSTALLED" ]; then
   # Update packages and add gnupg and https for apt to fetch yarn packages.
-  apt update
   apt install -y gnupg apt-transport-https
   # Add yarn deb repo.
   curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
   echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
-  apt update
   apt install -y yarn
   # Add and fetch up to date nodejs to allow yarn to run correctly.
   curl -sL https://deb.nodesource.com/setup_10.x | bash -
