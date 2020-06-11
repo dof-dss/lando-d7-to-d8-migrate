@@ -154,6 +154,15 @@
   <field name="boost_document" type="pfloat" indexed="true" stored="false" multiValued="false" docValues="true"/>
   <field name="boost_term" type="boost_term_payload" indexed="true" stored="false" multiValued="true"/>
 
+  <!-- This field is used to build the spellchecker index -->
+  <field name="spell" type="text_spell_und" indexed="true" stored="true" multiValued="true"/>
+
+  <!-- copyField commands copy one field to another at the time a document
+       is added to the index.  It's used either to index the same field differently,
+       or to add multiple fields to the same field for easier/faster searching.  -->
+  <copyField source="ts_*" dest="spell"/>
+  <copyField source="tm_*" dest="spell"/>
+
   <!-- Dynamic field definitions.  If a field name is not found, dynamicFields
        will be used if the name matches any of the patterns.
        RESTRICTION: the glob-like pattern in the name attribute must have

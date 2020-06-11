@@ -13,6 +13,11 @@ DRUPAL_TEST_PROFILE=$DRUPAL_ROOT/profiles/custom/test_profile
 # Semaphore files to control whether we need to trigger an install
 # of supporting software or config files.
 NODE_YARN_INSTALLED=/etc/NODE_YARN_INSTALLED
+CKEDITOR_PATCHED=/etc/CKEDITOR_PATCHED
+
+# Update APT cache and install Vim.
+  apt update
+  apt install -y vim
 
 # Add hirak/prestissimo to speed up composer downloads.
 composer global require hirak/prestissimo --no-interaction
@@ -81,12 +86,10 @@ fi
 # Add yarn/nodejs packages to allow functional testing on this service.
 if [ ! -f "$NODE_YARN_INSTALLED" ]; then
   # Update packages and add gnupg and https for apt to fetch yarn packages.
-  apt update
   apt install -y gnupg apt-transport-https
   # Add yarn deb repo.
   curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
   echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
-  apt update
   apt install -y yarn
   # Add and fetch up to date nodejs to allow yarn to run correctly.
   curl -sL https://deb.nodesource.com/setup_10.x | bash -
@@ -120,6 +123,17 @@ if [ ! -f "$NODE_YARN_INSTALLED" ]; then
 
   touch $NODE_YARN_INSTALLED
 
+fi
+
+if [ ! -f "$CKEDITOR_PATCHED" ]; then
+  # Replace vanilla CKEditor config with a custom one to fix the click/drag bug with embedded entities.
+  echo "Replace vanilla CKEditor config with a custom one to fix the click/drag bug with embedded entities"
+  git clone https://github.com/dof-dss/ckeditor4-fix-widget-dnd.git /tmp/ckeditor4-fix-widget-dnd
+  rm -rf $DRUPAL_ROOT/core/assets/vendor/ckeditor
+  mv -v /tmp/ckeditor4-fix-widget-dnd/build/ckeditor $DRUPAL_ROOT/core/assets/vendor/ckeditor
+  rm -rf /tmp/ckeditor4-fix-widget-dnd
+
+  touch $CKEDITOR_PATCHED
 fi
 
 # Add talismanrc to all known repos in this project, so we don't accidentally commit anything sensitive.
