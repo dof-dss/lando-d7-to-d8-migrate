@@ -106,6 +106,6 @@ tooling:
       - appserver: drush -r /app/drupal8/web cr -y && drush -r /app/drupal8/web cim -y && drush -r /app/drupal8/web ib --choice=full
   devmode:
     service: appserver
-    description: Clone all development repositories for
+    description: Clone all DOF development repositories
     cmd: "sh /app/scripts/setup-for-dev.sh"
     user: root
