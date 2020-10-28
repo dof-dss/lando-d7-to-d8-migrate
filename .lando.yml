@@ -103,4 +103,9 @@ tooling:
   imp:
     description: Import Configuration and Structure
     cmd:
-      - appserver: drush -r /app/drupal8/web cr -y && drush -r /app/drupal8/web cim -y && drush -r /app/drupal8/web ib --choice=full
+      - appserver: drush -r /app/drupal8/web cr -y && drush -r /app/drupal8/web cim -y && drush -r /app/drupal8/web ib --choice=safe
+  devmode:
+    service: appserver
+    description: Clone all DOF development repositories
+    cmd: "sh /app/scripts/setup-for-dev.sh"
+    user: root
