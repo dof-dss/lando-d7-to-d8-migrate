@@ -81,7 +81,7 @@ tooling:
   mist:
     description: View migration status
     cmd:
-      - appserver: drush -r /app/drupal8/web migrate-status
+      - appserver: drush -r /app/drupal8/web migrate-status --tag="NIDirect"
   miup:
     description: Dump D8 database and run migrate-upgrade
     service: appserver
@@ -91,7 +91,7 @@ tooling:
   miip:
     description: Perform a migrate-import
     cmd:
-      - appserver: drush -r /app/drupal8/web migrate-import
+      - appserver: drush -r /app/drupal8/web migrate-import --feedback=100
   mirb:
     description: Perform a migrate-rollback
     cmd:
