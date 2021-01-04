@@ -12,7 +12,7 @@ env_file:
   - config/local.envvars
 services:
   appserver:
-    xdebug: false
+    xdebug: debug
     build_as_root:
       - /app/scripts/appserver_build.sh
   redis:
