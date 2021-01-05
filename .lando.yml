@@ -12,7 +12,9 @@ env_file:
   - config/local.envvars
 services:
   appserver:
-    xdebug: false
+    # See https://xdebug.org/docs/all_settings#mode for XDebug modes.
+    # Use comma's to enable multiple modes e.g. develop,debug.
+    xdebug: debug
     build_as_root:
       - /app/scripts/appserver_build.sh
   redis:
