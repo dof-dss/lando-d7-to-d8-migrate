@@ -25,6 +25,8 @@ services:
   drupal7db:
     type: mariadb
     portforward: true
+    config:
+      database: config/my-legacy.cnf
     creds:
       user: drupal7
       password: drupal7
