@@ -3,6 +3,7 @@
 drupal8
 exports
 imports
+.htpasswd
 
 # Ignore IDE / dev tools config
 /nbproject/
