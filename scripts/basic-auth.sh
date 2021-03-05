@@ -13,7 +13,7 @@ WEB_ROOT=/app/drupal8/web
 
 if grep -Fxq "AuthType Basic" $WEB_ROOT/.htaccess
 then
-    lando_green "Disable basic authentication";
+    lando_green "Basic authentication: Disabled";
 
     sed -i -e '/^# Apache basic authentication$/d' $WEB_ROOT/.htaccess
     sed -i -e '/^AuthType Basic$/d' $WEB_ROOT/.htaccess
@@ -21,7 +21,7 @@ then
     sed -i -e '/^AuthUserFile \/app\/config\/.htpasswd$/d' $WEB_ROOT/.htaccess
     sed -i -e '/^Require valid-user$/d' $WEB_ROOT/.htaccess
 else
-    lando_green "Enable basic authentication";
+    lando_green "Basic authentication: Enabled";
 
     echo '# Apache basic authentication' >> $WEB_ROOT/.htaccess
     echo 'AuthType Basic' >> $WEB_ROOT/.htaccess
