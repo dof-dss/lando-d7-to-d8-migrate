@@ -111,3 +111,8 @@ tooling:
     description: Clone all DOF development repositories
     cmd: "sh /app/scripts/setup-for-dev.sh"
     user: root
+  basic-auth:
+    service: appserver
+    description: Enable basic authentication
+    cmd: "sh /app/scripts/basic-auth.sh"
+    user: root

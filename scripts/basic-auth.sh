@@ -2,6 +2,13 @@
 
 . /helpers/log.sh
 
+if [ ! -e /app/config/.htpasswd ]
+then
+    lando_yellow "Password file not found, exiting."
+    lando_yellow "To create: 'sudo htpasswd -c <project-path>/config/.htpasswd <username>'"
+    exit 1
+fi
+
 WEB_ROOT=/app/drupal8/web
 
 if grep -Fxq "AuthType Basic" $WEB_ROOT/.htaccess
