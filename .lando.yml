@@ -9,7 +9,7 @@ config:
 compose:
   - docker-compose.yml
 env_file:
-  - config/local.envvars
+  - config/.env
 services:
   appserver:
     # See https://xdebug.org/docs/all_settings#mode for XDebug modes.
