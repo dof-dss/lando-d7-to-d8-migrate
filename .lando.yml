@@ -2,17 +2,19 @@ recipe: drupal8
 config:
   webroot: drupal8/web
   database: mariadb
-  php: '7.3'
+  php: '7.4'
   config:
     php: config/php.ini
     database: config/my.cnf
 compose:
   - docker-compose.yml
 env_file:
-  - config/local.envvars
+  - config/.env
 services:
   appserver:
-    xdebug: false
+    # See https://xdebug.org/docs/all_settings#mode for XDebug modes.
+    # Use comma's to enable multiple modes e.g. develop,debug.
+    xdebug: debug
     build_as_root:
       - /app/scripts/appserver_build.sh
   redis:
@@ -81,7 +83,7 @@ tooling:
   mist:
     description: View migration status
     cmd:
-      - appserver: drush -r /app/drupal8/web migrate-status
+      - appserver: drush -r /app/drupal8/web migrate-status --tag="NIDirect"
   miup:
     description: Dump D8 database and run migrate-upgrade
     service: appserver
@@ -91,7 +93,7 @@ tooling:
   miip:
     description: Perform a migrate-import
     cmd:
-      - appserver: drush -r /app/drupal8/web migrate-import
+      - appserver: drush -r /app/drupal8/web migrate-import --feedback=100
   mirb:
     description: Perform a migrate-rollback
     cmd:
@@ -103,9 +105,14 @@ tooling:
   imp:
     description: Import Configuration and Structure
     cmd:
-      - appserver: drush -r /app/drupal8/web cr -y && drush -r /app/drupal8/web cim -y && drush -r /app/drupal8/web ib --choice=safe
+      - appserver: drush -r /app/drupal8/web cr -y && drush -r /app/drupal8/web cim -y && drush -r /app/drupal8/web ia --choice=safe
   devmode:
     service: appserver
     description: Clone all DOF development repositories
     cmd: "sh /app/scripts/setup-for-dev.sh"
+    user: root
+  basic-auth:
+    service: appserver
+    description: Enable basic authentication
+    cmd: "sh /app/scripts/basic-auth.sh"
     user: root

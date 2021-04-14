@@ -90,6 +90,7 @@ if [ ! -f "$NODE_YARN_INSTALLED" ]; then
   # Add yarn deb repo.
   curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
   echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
+  apt update
   apt install -y yarn
   # Add and fetch up to date nodejs to allow yarn to run correctly.
   curl -sL https://deb.nodesource.com/setup_10.x | bash -
@@ -135,39 +136,3 @@ if [ ! -f "$CKEDITOR_PATCHED" ]; then
 
   touch $CKEDITOR_PATCHED
 fi
-
-# Add talismanrc to all known repos in this project, so we don't accidentally commit anything sensitive.
-echo "Adding talismanrc files to repos in this project"
-cp /app/config/talisman.config /app/.talismanrc
-cp /app/config/talisman.config /app/drupal8/.talismanrc
-cp /app/config/talisman.config $DRUPAL_MIGRATE_CODE/.talismanrc
-cp /app/config/talisman.config $DRUPAL_CUSTOM_CODE/.talismanrc
-cp /app/config/talisman.config $DRUPAL_TEST_PROFILE/.talismanrc
-
-cat << EOF
-
-===============================================================================
-⚠️                  INSTALL TALISMAN FOR LOCAL DEVELOPMENT                   ⚠️
-
-You are *STRONGLY* recommend to use Talisman (by Thoughtworks) to ensure that
-potential secrets or sensitive information do not leave your workstation.
-
-Talisman runs on your host OS and scans your commits against open-source
-detector plugins for things such as auth tokens, SSH keys, credit card numbers
-or large binary files that can indicate unwanted data in a repository.
-
-If it finds something suspicious it will reject your local commit and tell you,
-allowing you to fix it or tell Talisman to ignore a false-positive.
-
-PLEASE NOTE:
-
-- You need to install Talisman on your HOST system.
-- Talisman is most effective as a global pre-commit git hook.
-- You can install it per repository but it requires more configuration on your part.
-- It is a one-off task, but it can save you a very awkward conversation in future.
-
-INSTALLATION:
-
-👉 https://github.com/thoughtworks/talisman#installation-as-a-global-hook-template
-
-EOF

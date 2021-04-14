@@ -19,7 +19,7 @@ Now we can download Drupal 8 and import our Drupal 7 assets.
 
  1. Copy your Drupal 7 database dump to ./imports/data and site files to ./imports/files (Note that you should copy the 'sites' directory into here, so that the path './imports/files/sites/default/files/articles' exists)
  2. Make a copy of .lando.example.yml naming it .lando.local.yml and edit with your own unique project name.
- 3. Update config/local.envvars with any local changes you require.
+ 3. Create config/.env with any local changes you require: `cp config/.env.sample config/.env`. You'll need to populate the sensitive values by consulting a member of the project team or having access to the hosting environment.
  4. Run *'lando start'*
  5. Run *'lando db-import -h drupal7db ./imports/data/[SQL DUMP FILENAME].sql'*
  6. Open your lando site url (displayed at the end of 'lando start', or use *'lando info'*)
@@ -55,14 +55,6 @@ Run the following utils using: `lando [command]`
  - **miup** - Migrate upgrade: Exports Drupal 8 database to /exports/data and runs *'drush migrate-upgrade'*
  - **miip** - Migrate import: Alias of *'drush migrate-import'*
  - **mirs** - Migrate reset status: Alias of *'drush migrate-reset-status'*
-
-## Talisman pre-commit hooks
-
-We *strongly* recommend developers use Talisman when working on this project. 
-
-Talisman validates the outgoing changeset for things that look suspicious - such as authorization tokens and private keys.
-
-(Installation instructions)[https://github.com/thoughtworks/talisman/#installation-as-a-global-hook-template]
 
 ### FAQ
 
