@@ -28,6 +28,8 @@ Now we can download Drupal 8 and import our Drupal 7 assets.
  9. Read the following tips to ensure you are using the right development and configuration settings.
 
  ## Tips
+ - In your .env file update the CONFIG_SYNC_DIRECTORY to point to the correct path in Lando (e.g. CONFIG_SYNC_DIRECTORY=/app/drupal8/config/sync)
+ - To get a hash_salt for your .env file run `platform drush -p <project> -e <environment> php-eval 'echo \Drupal\Core\Site\Settings::getHashSalt();'`
  - If configuration import is taking a long time (> 60 mins) stop the install, clean the database and reboot your machine. 
  - Edit settings.local.php file to toggle development settings.
  - Edit settings.php and uncomment the *'config split environment'* settings, checking the appropriate boolean assignment is set.
