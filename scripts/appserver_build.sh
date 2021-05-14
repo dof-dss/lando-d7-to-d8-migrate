@@ -93,7 +93,7 @@ if [ ! -f "$NODE_YARN_INSTALLED" ]; then
   apt update
   apt install -y yarn
   # Add and fetch up to date nodejs to allow yarn to run correctly.
-  curl -sL https://deb.nodesource.com/setup_10.x | bash -
+  curl -sL https://deb.nodesource.com/setup_16.x | bash -
   apt install -y nodejs
 
   # Copy Drupal .env.example file, inject Lando vars and set in place for use by Nightwatch conf.
