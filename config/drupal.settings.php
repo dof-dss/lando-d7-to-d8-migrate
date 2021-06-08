@@ -94,8 +94,11 @@ $settings['config_readonly_whitelist_patterns'] = [
 // Environment indicator config.
 $settings['simple_environment_indicator'] = sprintf('%s %s', getenv('SIMPLEI_ENV_COLOUR'), getenv('SIMPLEI_ENV_NAME'));
 
-// Geocoder API key.
+// Geolocation module API key.
 $config['geolocation_google_maps.settings']['google_map_api_key'] = getenv('GOOGLE_MAP_API_KEY');
+$config['geolocation_google_maps.settings']['google_map_api_server_key'] = getenv('GOOGLE_MAP_API_SERVER_KEY');
+// Geocoder module API key.
+$config['geocoder.settings']['plugins_options']['googlemaps']['apikey'] = getenv('GOOGLE_MAP_API_SERVER_KEY');
 
 // Google Analytics API config.
 $config['google_analytics_counter.settings']['general_settings']['client_id'] = getenv('GA_CLIENT_ID');
