@@ -22,13 +22,6 @@ services:
     persist: true
     config:
         server: config/redis.conf
-  drupal7db:
-    type: mariadb
-    portforward: true
-    creds:
-      user: drupal7
-      password: drupal7
-      database: drupal7
   solr:
     type: solr:7
     portforward: true
@@ -89,7 +82,6 @@ tooling:
     service: appserver
     cmd:
       - drupal dbdu --gz && mv drupal8**.sql.gz /app/exports/data
-      - drush -r /app/drupal8/web migrate-upgrade --configure-only --legacy-db-key=drupal7db --legacy-root=/app/imports/files/
   miip:
     description: Perform a migrate-import
     cmd:

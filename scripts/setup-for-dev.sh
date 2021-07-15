@@ -4,10 +4,6 @@
 
 lando_green "Cloning development repositories";
 
-lando_blue "Cloning Migration Modules"
-rm -rf /app/drupal8/web/modules/migrate/nidirect-migrations/
-git clone git@github.com:dof-dss/nidirect-d8-mig-mods.git /app/drupal8/web/modules/migrate/nidirect-migrations/
-
 lando_pink "Cloning Custom Modules"
 rm -rf /app/drupal8/web/modules/custom
 git clone git@github.com:dof-dss/nidirect-site-modules.git /app/drupal8/web/modules/custom
