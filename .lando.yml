@@ -11,6 +11,12 @@ compose:
 env_file:
   - config/.env
 services:
+  blackfire:
+    type: blackfire
+    server_id: token-value
+    server_token: token-value
+    client_id: token-value
+    client_token: token-value
   appserver:
     # See https://xdebug.org/docs/all_settings#mode for XDebug modes.
     # Use comma's to enable multiple modes e.g. develop,debug.
