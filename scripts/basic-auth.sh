@@ -9,7 +9,7 @@ then
     exit 1
 fi
 
-WEB_ROOT=/app/drupal8/web
+WEB_ROOT=/app/drupal/web
 
 if grep -Fxq "AuthType Basic" $WEB_ROOT/.htaccess
 then

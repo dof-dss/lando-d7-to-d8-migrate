@@ -1,6 +1,6 @@
-recipe: drupal8
+recipe: drupal9
 config:
-  webroot: drupal8/web
+  webroot: drupal/web
   database: mariadb
   php: '7.4'
   config:
@@ -11,12 +11,12 @@ compose:
 env_file:
   - config/.env
 services:
-  blackfire:
-    type: blackfire
-    server_id: token-value
-    server_token: token-value
-    client_id: token-value
-    client_token: token-value
+#  blackfire:
+#    type: blackfire
+#    server_id: token-value
+#    server_token: token-value
+#    client_id: token-value
+#    client_token: token-value
   appserver:
     # See https://xdebug.org/docs/all_settings#mode for XDebug modes.
     # Use comma's to enable multiple modes e.g. develop,debug.
@@ -28,13 +28,6 @@ services:
     persist: true
     config:
         server: config/redis.conf
-  drupal7db:
-    type: mariadb
-    portforward: true
-    creds:
-      user: drupal7
-      password: drupal7
-      database: drupal7
   solr:
     type: solr:7
     portforward: true
@@ -70,48 +63,26 @@ tooling:
                   lando nightwatch ../modules/custom/modulename/tests/src/Nightwatch/Tests/yourTestSuite.js\n
                   > Run all tests except Core\n
                   lando nightwatch --skiptags core\n"
-    cmd: "yarn --cwd=/app/drupal8/web/core test:nightwatch"
+    cmd: "yarn --cwd=/app/drupal/web/core test:nightwatch"
   phpunit:
     description: "Run PHPUnit tests. You can pass options, e.g. --group=nidirect, as you require"
     service: appserver
-    cmd: cd /app/drupal8/web/core && /app/drupal8/vendor/bin/phpunit -c /app/drupal8/web/core/phpunit.xml
+    cmd: cd /app/drupal/web/core && /app/drupal/vendor/bin/phpunit -c /app/drupal/web/core/phpunit.xml
   phpcs:
-    description: Run PHPCS checks against all custom Drupal 8 code (modules, migrations, themes) e.g. 'lando phpcs'
+    description: Run PHPCS checks against all custom Drupal code, e.g. 'lando phpcs'
     service: appserver
-    cmd: /app/drupal8/phpcs.sh "/app/drupal8" "/app/drupal8/web/modules/origins /app/drupal8/web/modules/custom /app/drupal8/web/modules/migrate /app/drupal8/web/themes/custom /app/drupal8/web/profiles/custom"
+    cmd: /app/drupal/phpcs.sh "/app/drupal" "/app/drupal/web/modules/origins /app/drupal/web/modules/custom /app/drupal/web/themes/custom /app/drupal/web/profiles/custom"
   drck:
     description: Run drupal-check for Drupal 9 compatibility e.g. 'lando drck ./'
     service: appserver
-    cmd: /app/drupal8/vendor/bin/drupal-check
+    cmd: /app/drupal/vendor/bin/drupal-check
   drush:
     server: appserver
-    cmd: drush -r /app/drupal8/web
-  mist:
-    description: View migration status
-    cmd:
-      - appserver: drush -r /app/drupal8/web migrate-status --tag="NIDirect"
-  miup:
-    description: Dump D8 database and run migrate-upgrade
-    service: appserver
-    cmd:
-      - drupal dbdu --gz && mv drupal8**.sql.gz /app/exports/data
-      - drush -r /app/drupal8/web migrate-upgrade --configure-only --legacy-db-key=drupal7db --legacy-root=/app/imports/files/
-  miip:
-    description: Perform a migrate-import
-    cmd:
-      - appserver: drush -r /app/drupal8/web migrate-import --feedback=100
-  mirb:
-    description: Perform a migrate-rollback
-    cmd:
-      - appserver: drush -r /app/drupal8/web migrate:rollback
-  mirs:
-    description: Perform a migrate-reset-status
-    cmd:
-      - appserver: drush -r /app/drupal8/web migrate-reset-status
+    cmd: /app/drupal/vendor/bin/drush -r /app/drupal/web
   imp:
     description: Import Configuration and Structure
     cmd:
-      - appserver: drush -r /app/drupal8/web cr -y && drush -r /app/drupal8/web cim -y && drush -r /app/drupal8/web ia --choice=safe
+      - appserver: /app/vendor/bin/drush -r /app/drupal/web cr -y && drush -r /app/drupal/web cim -y && drush -r /app/drupal/web ia --choice=safe
   devmode:
     service: appserver
     description: Clone all DOF development repositories
