@@ -1,6 +1,6 @@
 .DS_Store
 .lando.local.yml
-drupal8
+drupal
 exports
 imports
 .htpasswd

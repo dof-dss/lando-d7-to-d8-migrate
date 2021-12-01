@@ -3,7 +3,7 @@
 # Variables to indicate key settings files or directories for Drupal.
 DRUPAL_REPO_URL=git@github.com:dof-dss/nidirect-drupal.git
 
-DRUPAL_ROOT=/app/drupal8/web
+DRUPAL_ROOT=/app/drupal/web
 DRUPAL_SETTINGS_FILE=$DRUPAL_ROOT/sites/default/settings.php
 DRUPAL_SERVICES_FILE=$DRUPAL_ROOT/sites/default/services.yml
 DRUPAL_CUSTOM_CODE=$DRUPAL_ROOT/modules/custom
@@ -16,11 +16,8 @@ NODE_YARN_INSTALLED=/etc/NODE_YARN_INSTALLED
 CKEDITOR_PATCHED=/etc/CKEDITOR_PATCHED
 
 # Update APT cache and install Vim.
-  apt update
-  apt install -y vim
-
-# Add hirak/prestissimo to speed up composer downloads.
-composer global require hirak/prestissimo --no-interaction
+apt update
+apt install -y vim
 
 # Create export directories for config and data.
 if [ ! -d "/app/exports" ]; then
@@ -28,25 +25,25 @@ if [ ! -d "/app/exports" ]; then
   mkdir -p /app/exports/config && mkdir /app/exports/data
 fi
 
-# If we don't have a Drupal 8 install, download it.
-if [ ! -d "/app/drupal8" ]; then
+# If we don't have a Drupal install, download it.
+if [ ! -d "/app/drupal" ]; then
   echo "Downloading Drupal"
-  git clone $DRUPAL_REPO_URL /app/drupal8/
+  git clone $DRUPAL_REPO_URL /app/drupal/
   echo "Installing Drupal"
-  composer -d/app/drupal8 install
+  composer -d/app/drupal install
 fi
 
 # Create Drupal public files directory and set IO permissions.
-if [ ! -d "/app/drupal8/web/sites/default/files" ]; then
+if [ ! -d "/app/drupal/web/sites/default/files" ]; then
   echo "Creating public Drupal files directory"
-  mkdir -p /app/drupal8/web/sites/default/files
-  chmod -R 0777 /app/drupal8/web/sites/default/files
+  mkdir -p /app/drupal/web/sites/default/files
+  chmod -R 0777 /app/drupal/web/sites/default/files
 fi
 
 # Create Drupal private file directory above web root.
-if [ ! -d "/app/drupal8/private" ]; then
+if [ ! -d "/app/drupal/private" ]; then
   echo "Creating private Drupal files directory"
-  mkdir -p /app/drupal8/private
+  mkdir -p /app/drupal/private
 fi
 
 # Set local environment settings.php file.
@@ -57,8 +54,8 @@ cp -v /app/config/drupal.settings.php $DRUPAL_ROOT/sites/default/settings.local.
 
 echo "Updating config sync to enable install profile"
 # Playing it safe here and matching only the exact strings vs matches against 'standard'.
-sed -i 's/standard: 1000/minimal: 1000/g' /app/drupal8/config/sync/core.extension.yml
-sed -i 's/profile: standard/profile: minimal/g' /app/drupal8/config/sync/core.extension.yml
+sed -i 's/standard: 1000/minimal: 1000/g' /app/drupal/config/sync/core.extension.yml
+sed -i 's/profile: standard/profile: minimal/g' /app/drupal/config/sync/core.extension.yml
 
 # Copy default services config and replace key values for local development.
 cp -v /app/config/drupal.services.yml $DRUPAL_SERVICES_FILE
