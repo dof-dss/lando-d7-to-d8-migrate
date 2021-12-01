@@ -1,9 +1,6 @@
 <?php
 
 // @codingStandardsIgnoreFile
-$settings['container_yamls'][] = $app_root . '/' . $site_path . '/services.development.yml';
-$settings['file_private_path'] = getenv('FILE_PRIVATE_PATH');
-
 $databases['default']['default'] = [
   'database'  => getenv('DB_NAME'),
   'username'  => getenv('DB_USER'),
@@ -15,21 +12,17 @@ $databases['default']['default'] = [
   'driver'    => getenv('DB_DRIVER'),
 ];
 
-$databases['drupal7db']['default'] = array (
-  'database' => getenv('MIGRATE_SOURCE_DB_NAME'),
-  'username' => getenv('MIGRATE_SOURCE_DB_USER'),
-  'password' => getenv('MIGRATE_SOURCE_DB_PASS'),
-  'prefix' => getenv('MIGRATE_SOURCE_DB_PREFIX'),
-  'host' => getenv('MIGRATE_SOURCE_DB_HOST'),
-  'port' => getenv('MIGRATE_SOURCE_DB_PORT'),
-  'namespace' => getenv('MIGRATE_SOURCE_DB_NAMESPACE'),
-  'driver' => getenv('MIGRATE_SOURCE_DB_DRIVER'),
-);
+$settings['container_yamls'][] = $app_root . '/' . $site_path . '/services.development.yml';
+
+// Set config split environment.
+$config['config_split.config_split.local']['status'] = TRUE;
+$config['config_split.config_split.development']['status'] = FALSE;
+$config['config_split.config_split.production']['status'] = FALSE;
 
 // Redis Cache.
 // Due to issues with enabling Redis during install/config import. We cannot enable the cache backend by default.
 // Once you have a site/db installed. Enable the Redis module and change the $redis_enabled to true.
-$redis_enabled = FALSE;
+$redis_enabled = TRUE;
 if ($redis_enabled && !\Drupal\Core\Installer\InstallerKernel::installationAttempted() && extension_loaded('redis') && class_exists('Drupal\redis\ClientFactory')){
     $settings['redis.connection']['interface'] = 'PhpRedis';
     $settings['redis.connection']['host'] = getenv('REDIS_HOSTNAME');
@@ -72,32 +65,3 @@ if ($redis_enabled && !\Drupal\Core\Installer\InstallerKernel::installationAttem
     ];
 }
 
-// Prevent SqlBase from moaning.
-$databases['migrate']['default'] = $databases['drupal7db']['default'];
-
-// Custom configuration sync directory under web root.
-$settings['config_sync_directory'] = getenv('CONFIG_SYNC_DIRECTORY');
-
-// Set config split environment.
-$config['config_split.config_split.local']['status'] = TRUE;
-$config['config_split.config_split.development']['status'] = FALSE;
-$config['config_split.config_split.production']['status'] = FALSE;
-
-// Site hash salt.
-$settings['hash_salt'] = getenv('HASH_SALT');
-
-// Configuration that is allowed to be changed in readonly environments.
-$settings['config_readonly_whitelist_patterns'] = [
-  'system.site',
-];
-
-// Environment indicator config.
-$settings['simple_environment_indicator'] = sprintf('%s %s', getenv('SIMPLEI_ENV_COLOUR'), getenv('SIMPLEI_ENV_NAME'));
-
-// Geocoder API key.
-$config['geolocation_google_maps.settings']['google_map_api_key'] = getenv('GOOGLE_MAP_API_KEY');
-
-// Google Analytics API config.
-$config['google_analytics_counter.settings']['general_settings']['client_id'] = getenv('GA_CLIENT_ID');
-$config['google_analytics_counter.settings']['general_settings']['client_secret'] = getenv('GA_CLIENT_SECRET');
-$config['google_analytics_counter.settings']['general_settings']['redirect_uri'] = getenv('GA_REDIRECT_URI');
