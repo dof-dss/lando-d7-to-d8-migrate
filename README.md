@@ -17,18 +17,25 @@ Ensure you have the following installed:
 
 Now we can download Drupal 8 and import our Drupal 7 assets.
 
- 1. Copy your Drupal 7 database dump to ./imports/data and site files to ./imports/files (Note that you should copy the 'sites' directory into here, so that the path './imports/files/sites/default/files/articles' exists)
- 2. Make a copy of .lando.example.yml naming it .lando.local.yml and edit with your own unique project name.
- 3. Create config/.env with any local changes you require: `cp config/.env.sample config/.env`. You'll need to populate the sensitive values by consulting a member of the project team or having access to the hosting environment.
- 4. Run *'lando start'*
- 5. Run *'lando db-import -h drupal7db ./imports/data/[SQL DUMP FILENAME].sql'*
- 6. Open your lando site url (displayed at the end of 'lando start', or use *'lando info'*)
- 7. Proceed with the Drupal 8 installation.
- 8. On the 'Select an installation profile', check 'Use existing configuration' and continue.
+ 1. Make a copy of .lando.example.yml naming it .lando.local.yml and edit with your own unique project name.
+ 2. Create config/.env with any local changes you require: `cp config/.env.sample config/.env`. 
+	As a minimum you'll need to set the 'HASH_SALT' to a random string and set CONFIG_SYNC_DIRECTORY to '../config/sync'
+ 3. Run *'lando start'*
+ 4. From the /drupal directory run 'lando composer install'
+ 5. Open your lando site url (displayed at the end of 'lando start', or use *'lando info'*)
+ 6. Proceed with the Drupal 9 installation.
+ 7. On the 'Select an installation profile', check 'Standard' and continue.
+ 8. Once Drupal has successfully installed you may want to download a database dump from Platform.sh and
+	use 'lando db-import <filename>' to load it into Drupal
  9. Read the following tips to ensure you are using the right development and configuration settings.
 
+If you wish to run migrations:
+
+ 1. Copy your Drupal 7 database dump to ./imports/data and site files to ./imports/files (Note that you should copy the 'sites' directory into here, so that the path './imports/files/sites/default/files/articles' exists)
+ 2. Run *'lando db-import -h drupal7db ./imports/data/[SQL DUMP FILENAME].sql'*
+
  ## Tips
- - In your .env file update the CONFIG_SYNC_DIRECTORY to point to the correct path in Lando (e.g. CONFIG_SYNC_DIRECTORY=/app/drupal8/config/sync)
+ - In your .env file update the CONFIG_SYNC_DIRECTORY to point to the correct path in Lando (e.g. CONFIG_SYNC_DIRECTORY=../config/sync)
  - To get a hash_salt for your .env file run `platform drush -p <project> -e <environment> php-eval 'echo \Drupal\Core\Site\Settings::getHashSalt();'`
  - If configuration import is taking a long time (> 60 mins) stop the install, clean the database and reboot your machine. 
  - Edit settings.local.php file to toggle development settings.
