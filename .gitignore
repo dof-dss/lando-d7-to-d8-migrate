@@ -3,6 +3,7 @@
 drupal
 exports
 imports
+log
 .htpasswd
 
 # Ignore IDE / dev tools config
