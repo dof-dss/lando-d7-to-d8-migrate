@@ -30,6 +30,7 @@ if [ ! -d "/app/drupal" ]; then
   echo "Downloading Drupal"
   git clone $DRUPAL_REPO_URL /app/drupal/
   echo "Installing Drupal"
+  export COMPOSER_PROCESS_TIMEOUT=600
   composer -d/app/drupal install
 fi
 
