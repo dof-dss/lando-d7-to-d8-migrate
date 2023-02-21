@@ -2,7 +2,7 @@ recipe: drupal9
 config:
   webroot: drupal/web
   database: mariadb
-  php: '7.4'
+  php: '8.1'
   config:
     php: config/php.ini
     database: config/my.cnf
@@ -82,7 +82,7 @@ tooling:
   imp:
     description: Import Configuration and Structure
     cmd:
-      - appserver: /app/vendor/bin/drush -r /app/drupal/web cr -y && drush -r /app/drupal/web cim -y && drush -r /app/drupal/web ia --choice=safe
+      - appserver: /app/drupal/vendor/bin/drush -r /app/drupal/web cr -y && /app/drupal/vendor/bin/drush -r /app/drupal/web cim -y && /app/drupal/vendor/bin/drush -r /app/drupal/web ia --choice=safe
   devmode:
     service: appserver
     description: Clone all DOF development repositories
