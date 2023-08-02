@@ -1,3 +1,7 @@
+# MORE IMPORTANT
+
+This repo is no longer in use. Configuration and functionality have been folded into the NIDirect repository as per other project structures, see: https://github.com/dof-dss/nidirect-drupal
+
 ## IMPORTANT
 
 To enable Redis cache you will first need a completed install of the site. Enable the Redis module and update /sites/default/settings.php file to set $redis_enabled to true.
